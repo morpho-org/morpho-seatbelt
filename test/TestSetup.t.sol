@@ -47,10 +47,9 @@ contract TestSetup is Test, Configured {
     function _loadConfig() internal virtual override {
         super._loadConfig();
         uint256 forkBlockNumber = config.getForkBlockNumber();
-        if(forkBlockNumber == 0) {
+        if (forkBlockNumber == 0) {
             forkId = vm.createSelectFork(chain.rpcUrl);
-        }
-        else {
+        } else {
             forkId = vm.createSelectFork(chain.rpcUrl, config.getForkBlockNumber());
         }
         morphoAdmin = ISafe(config.getAddress("morphoAdmin"));

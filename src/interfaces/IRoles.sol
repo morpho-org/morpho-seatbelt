@@ -7,25 +7,12 @@ import {Operation, ExecutionOptions, Comparison, ParameterType} from "src/librar
 interface IRoles is IAvatar {
     function setUp(bytes memory initParams) external;
     function setMultisend(address _multisend) external;
-    function allowTarget(
-        uint16 role,
-        address targetAddress,
-        ExecutionOptions options
-    ) external;
+    function allowTarget(uint16 role, address targetAddress, ExecutionOptions options) external;
     function revokeTarget(uint16 role, address targetAddress) external;
-    function scopeTarget(uint16 role, address targetAddress)
+    function scopeTarget(uint16 role, address targetAddress) external;
+    function scopeAllowFunction(uint16 role, address targetAddress, bytes4 functionSig, ExecutionOptions options)
         external;
-    function scopeAllowFunction(
-        uint16 role,
-        address targetAddress,
-        bytes4 functionSig,
-        ExecutionOptions options
-    ) external;
-    function scopeRevokeFunction(
-        uint16 role,
-        address targetAddress,
-        bytes4 functionSig
-    ) external;
+    function scopeRevokeFunction(uint16 role, address targetAddress, bytes4 functionSig) external;
     function scopeFunction(
         uint16 role,
         address targetAddress,
@@ -59,17 +46,8 @@ interface IRoles is IAvatar {
         ParameterType paramType,
         bytes[] calldata compValues
     ) external;
-    function unscopeParameter(
-        uint16 role,
-        address targetAddress,
-        bytes4 functionSig,
-        uint8 paramIndex
-    ) external;
-    function assignRoles(
-        address module,
-        uint16[] calldata _roles,
-        bool[] calldata memberOf
-    ) external;
+    function unscopeParameter(uint16 role, address targetAddress, bytes4 functionSig, uint8 paramIndex) external;
+    function assignRoles(address module, uint16[] calldata _roles, bool[] calldata memberOf) external;
     function setDefaultRole(address module, uint16 role) external;
     function execTransactionWithRole(
         address to,

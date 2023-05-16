@@ -33,12 +33,9 @@ interface IAvatar {
     /// @param value Ether value of module transaction.
     /// @param data Data payload of module transaction.
     /// @param operation Operation type of module transaction: 0 == call, 1 == delegate call.
-    function execTransactionFromModule(
-        address to,
-        uint256 value,
-        bytes memory data,
-        Operation operation
-    ) external returns (bool success);
+    function execTransactionFromModule(address to, uint256 value, bytes memory data, Operation operation)
+        external
+        returns (bool success);
 
     /// @dev Allows a Module to execute a transaction and return data
     /// @notice Can only be called by an enabled module.
@@ -48,12 +45,9 @@ interface IAvatar {
     /// @param value Ether value of module transaction.
     /// @param data Data payload of module transaction.
     /// @param operation Operation type of module transaction: 0 == call, 1 == delegate call.
-    function execTransactionFromModuleReturnData(
-        address to,
-        uint256 value,
-        bytes memory data,
-        Operation operation
-    ) external returns (bool success, bytes memory returnData);
+    function execTransactionFromModuleReturnData(address to, uint256 value, bytes memory data, Operation operation)
+        external
+        returns (bool success, bytes memory returnData);
 
     /// @dev Returns if an module is enabled
     /// @return True if the module is enabled

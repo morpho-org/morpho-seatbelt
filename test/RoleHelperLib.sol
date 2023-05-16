@@ -11,7 +11,6 @@ library RoleHelperLib {
     uint256 internal constant ROLE_STORAGE_SLOT = 107;
     Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
 
-
     function isMember(IRoles roleModifier, uint16 role, address member) internal view returns (bool) {
         bytes32 storageSlot = keccak256(abi.encode(member, roleStorageHash(role, 0)));
         return abi.decode(abi.encode(vm.load((address(roleModifier)), storageSlot)), (bool));
@@ -24,25 +23,40 @@ library RoleHelperLib {
         t.options = ExecutionOptions(uint8(data >> 8));
     }
 
-    function functions(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig) internal view returns (uint256) {
+    function functions(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig)
+        internal
+        view
+        returns (uint256)
+    {
         bytes32 key = bytes32(abi.encodePacked(targetAddress, functionSig));
         bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 2)));
         uint256 data = uint256(vm.load((address(roleModifier)), storageSlot));
         return data;
     }
 
-    function compValues(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig, uint256 index) internal view returns (bytes32) {
+    function compValues(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig, uint256 index)
+        internal
+        view
+        returns (bytes32)
+    {
         bytes32 key = bytes32(abi.encodePacked(targetAddress, functionSig, uint8(index)));
         bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 3)));
         bytes32 data = vm.load((address(roleModifier)), storageSlot);
         return data;
     }
 
-    function compValuesOneOf(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig, uint256 index, uint256 numElements) internal view returns (bytes32[] memory) {
+    function compValuesOneOf(
+        IRoles roleModifier,
+        uint16 role,
+        address targetAddress,
+        bytes4 functionSig,
+        uint256 index,
+        uint256 numElements
+    ) internal view returns (bytes32[] memory) {
         bytes32 key = bytes32(abi.encodePacked(targetAddress, functionSig, uint8(index)));
         bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 4)));
         bytes32[] memory data = new bytes32[](numElements);
-        for(uint256 i; i < numElements; i++) {
+        for (uint256 i; i < numElements; i++) {
             data[i] = vm.load((address(roleModifier)), bytes32(uint256(storageSlot) + i));
         }
         return data;

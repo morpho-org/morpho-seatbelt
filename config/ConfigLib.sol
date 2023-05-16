@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: AGPL-3.0-only
+pragma solidity ^0.8.0;
+
+import {stdJson} from "@forge-std/StdJson.sol";
+
+struct Config {
+    string json;
+}
+
+library ConfigLib {
+    using stdJson for string;
+
+    string internal constant RPC_ALIAS_PATH = "$.rpcAlias";
+    string internal constant FORK_BLOCK_NUMBER_PATH = "$.forkBlockNumber";
+    string internal constant MORPHO_ADMIN_PATH = "$.morphoAdmin";
+    string internal constant MORPHO_DAO_PATH = "$.morphoDao";
+    string internal constant OPERATOR_PATH = "$.operator";
+    string internal constant DELAY_MODIFIER_PATH = "$.delayModifier";
+    string internal constant ROLE_MODIFIER_PATH = "$.roleModifier";
+    string internal constant PROXY_ADMIN_PATH = "$.proxyAdmin";
+
+    function getAddress(Config storage config, string memory key) internal returns (address) {
+        return config.json.readAddress(string.concat("$.", key));
+    }
+
+    function getAddressArray(Config storage config, string[] memory keys)
+        internal
+        returns (address[] memory addresses)
+    {
+        addresses = new address[](keys.length);
+
+        for (uint256 i; i < keys.length; ++i) {
+            addresses[i] = getAddress(config, keys[i]);
+        }
+    }
+
+    function getRpcAlias(Config storage config) internal returns (string memory) {
+        return config.json.readString(RPC_ALIAS_PATH);
+    }
+
+    function getForkBlockNumber(Config storage config) internal returns (uint256) {
+        return config.json.readUint(FORK_BLOCK_NUMBER_PATH);
+    }
+
+}

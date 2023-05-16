@@ -1,0 +1,11 @@
+{
+    "rpcAlias": "mainnet",
+    "forkBlockNumber": 0,
+    "morphoAdmin": "0x0b9915C13e8E184951Df0d9C0b104f8f1277648B",
+    "morphoDao": "0xcBa28b38103307Ec8dA98377ffF9816C164f9AFa",
+    "operator": "0x640428D38189B11B844dAEBDBAAbbdfbd8aE0143",
+    "delayModifier": "0x68d11129a514C45716e55B9771813f117c4c2FA5",
+    "roleModifier": "0xa8b9650935EFb3F2972D1Ca4D3A8BA752D1A807A",
+    "proxyAdmin": "0x99917ca0426fbC677e84f873Fb0b726Bb4799cD8",
+    "morpho": "0x33333aea097c193e66081e930c33020272b33333"
+}

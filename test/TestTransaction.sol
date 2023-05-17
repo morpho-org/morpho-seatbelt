@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: UNLICENSED
+// SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.13;
 
 import "test/TestSetup.sol";
@@ -32,6 +32,6 @@ contract TestTransaction is TestSetup {
 
     function testAssert() public {
         // Do assertions here
-        assertTrue(roleModifier.isMember(1, address(operator)));
+        assertTrue(roleModifier.members(1, address(operator)));
     }
 }

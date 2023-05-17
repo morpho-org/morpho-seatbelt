@@ -3,7 +3,7 @@ pragma solidity ^0.8.6;
 
 import {Vm} from "@forge-std/Vm.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
-import {TargetAddress, Clearance, ExecutionOptions} from "src/libraries/Types.sol";
+import {TargetAddress, Clearance, ExecutionOptions, ParameterType, Comparison} from "src/libraries/Types.sol";
 
 import {console2} from "@forge-std/console2.sol";
 
@@ -13,6 +13,8 @@ import {console2} from "@forge-std/console2.sol";
 library RoleHelperLib {
     uint256 internal constant ROLE_STORAGE_SLOT = 107;
     Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
+
+    /* GETTERS */
 
     function members(IRoles roleModifier, uint16 role, address member) internal view returns (bool) {
         bytes32 storageSlot = keccak256(abi.encode(member, roleStorageHash(role, 0)));
@@ -31,7 +33,7 @@ library RoleHelperLib {
         view
         returns (uint256 data)
     {
-        bytes32 key = bytes32(abi.encodePacked(targetAddress, functionSig));
+        bytes32 key = keyForFunctions(targetAddress, functionSig);
         bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 2)));
         data = uint256(vm.load((address(roleModifier)), storageSlot));
     }
@@ -41,7 +43,7 @@ library RoleHelperLib {
         view
         returns (bytes32 data)
     {
-        bytes32 key = bytes32(abi.encodePacked(targetAddress, functionSig, uint8(index)));
+        bytes32 key = keyForCompValues(targetAddress, functionSig, index);
         bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 3)));
         data = vm.load((address(roleModifier)), storageSlot);
     }
@@ -54,7 +56,7 @@ library RoleHelperLib {
         uint256 index,
         uint256 numElements
     ) internal view returns (bytes32[] memory data) {
-        bytes32 key = bytes32(abi.encodePacked(targetAddress, functionSig, uint8(index)));
+        bytes32 key = keyForCompValues(targetAddress, functionSig, index);
         bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 4)));
         data = new bytes32[](numElements);
         for (uint256 i; i < numElements; i++) {
@@ -62,7 +64,99 @@ library RoleHelperLib {
         }
     }
 
+    function functionExecutionOptions(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig)
+        internal
+        view
+        returns (ExecutionOptions options)
+    {
+        (options,,) = unpackFunction(functions(roleModifier, role, targetAddress, functionSig));
+    }
+
+    function functionIsWildcarded(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig)
+        internal
+        view
+        returns (bool isWildcarded)
+    {
+        (, isWildcarded,) = unpackFunction(functions(roleModifier, role, targetAddress, functionSig));
+    }
+
+    function functionLength(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig)
+        internal
+        view
+        returns (uint256 length)
+    {
+        (,, length) = unpackFunction(functions(roleModifier, role, targetAddress, functionSig));
+    }
+
+    function parameterIsScoped(
+        IRoles roleModifier,
+        uint16 role,
+        address targetAddress,
+        bytes4 functionSig,
+        uint256 index
+    ) internal view returns (bool isScoped) {
+        (isScoped,,) = unpackParameter(functions(roleModifier, role, targetAddress, functionSig), index);
+    }
+
+    function parameterType(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig, uint256 index)
+        internal
+        view
+        returns (ParameterType paramType)
+    {
+        (, paramType,) = unpackParameter(functions(roleModifier, role, targetAddress, functionSig), index);
+    }
+
+    function parameterComparison(
+        IRoles roleModifier,
+        uint16 role,
+        address targetAddress,
+        bytes4 functionSig,
+        uint256 index
+    ) internal view returns (Comparison paramComp) {
+        (,, paramComp) = unpackParameter(functions(roleModifier, role, targetAddress, functionSig), index);
+    }
+
+    /* HELPERS */
+
     function roleStorageHash(uint16 role, uint256 offset) internal pure returns (bytes32) {
         return bytes32(uint256(keccak256(abi.encode(role, ROLE_STORAGE_SLOT))) + offset);
+    }
+
+    function keyForFunctions(address targetAddress, bytes4 functionSig) internal pure returns (bytes32) {
+        return bytes32(abi.encodePacked(targetAddress, functionSig));
+    }
+
+    function keyForCompValues(address targetAddress, bytes4 functionSig, uint256 index)
+        internal
+        pure
+        returns (bytes32)
+    {
+        return bytes32(abi.encodePacked(targetAddress, functionSig, uint8(index)));
+    }
+
+    function unpackFunction(uint256 scopeConfig)
+        internal
+        pure
+        returns (ExecutionOptions options, bool isWildcarded, uint256 length)
+    {
+        uint256 isWildcardedMask = 1 << 253;
+
+        options = ExecutionOptions(scopeConfig >> 254);
+        isWildcarded = scopeConfig & isWildcardedMask != 0;
+        length = (scopeConfig << 8) >> 248;
+    }
+
+    function unpackParameter(uint256 scopeConfig, uint256 index)
+        internal
+        pure
+        returns (bool isScoped, ParameterType paramType, Comparison paramComp)
+    {
+        uint256 isScopedMask = 1 << (index + 96 + 96);
+        uint256 paramTypeMask = 3 << (index * 2 + 96);
+        uint256 paramCompMask = 3 << (index * 2);
+
+        isScoped = (scopeConfig & isScopedMask) != 0;
+        paramType = ParameterType((scopeConfig & paramTypeMask) >> (index * 2 + 96));
+        paramComp = Comparison((scopeConfig & paramCompMask) >> (index * 2));
     }
 }

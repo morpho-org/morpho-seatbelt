@@ -46,18 +46,23 @@ contract TestSetup is Test, Configured {
 
     function _loadConfig() internal virtual override {
         super._loadConfig();
-        uint256 forkBlockNumber = config.getForkBlockNumber();
+        uint256 forkBlockNumber = networkConfig.getForkBlockNumber();
         if (forkBlockNumber == 0) {
             forkId = vm.createSelectFork(chain.rpcUrl);
         } else {
-            forkId = vm.createSelectFork(chain.rpcUrl, config.getForkBlockNumber());
+            forkId = vm.createSelectFork(chain.rpcUrl, networkConfig.getForkBlockNumber());
         }
-        morphoAdmin = ISafe(config.getAddress("morphoAdmin"));
-        morphoDao = ISafe(config.getAddress("morphoDao"));
-        operator = ISafe(config.getAddress("operator"));
-        delayModifier = IDelay(config.getAddress("delayModifier"));
-        roleModifier = IRoles(config.getAddress("roleModifier"));
-        proxyAdmin = ProxyAdmin(config.getAddress("proxyAdmin"));
-        morpho = IMorpho(config.getAddress("morpho"));
+        morphoAdmin = ISafe(networkConfig.getAddress("morphoAdmin"));
+        morphoDao = ISafe(networkConfig.getAddress("morphoDao"));
+        operator = ISafe(networkConfig.getAddress("operator"));
+        delayModifier = IDelay(networkConfig.getAddress("delayModifier"));
+        roleModifier = IRoles(networkConfig.getAddress("roleModifier"));
+        proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
+        morpho = IMorpho(networkConfig.getAddress("morpho"));
+    }
+
+    function _addModule(IAvatar avatar, address module) internal {
+        vm.prank(address(avatar));
+        avatar.enableModule(module);
     }
 }

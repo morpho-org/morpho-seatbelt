@@ -13,35 +13,37 @@ import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/Pr
 
 import {IAvatar} from "src/interfaces/IAvatar.sol";
 
+import {Operation} from "src/libraries/Types.sol";
+
 contract Configured is StdChains {
     using ConfigLib for Config;
 
     VmSafe private constant vm = VmSafe(address(uint160(uint256(keccak256("hevm cheat code")))));
 
     Chain internal chain;
-    Config internal config;
+    Config internal networkConfig;
 
     function _network() internal view virtual returns (string memory) {
-        try vm.envString("NETWORK") returns (string memory configNetwork) {
-            return configNetwork;
+        try vm.envString("NETWORK") returns (string memory network) {
+            return network;
         } catch {
             return "ethereum-mainnet";
         }
     }
 
     function _initConfig() internal returns (Config storage) {
-        if (bytes(config.json).length == 0) {
+        if (bytes(networkConfig.json).length == 0) {
             string memory root = vm.projectRoot();
-            string memory path = string.concat(root, "/config/", _network(), ".json");
+            string memory path = string.concat(root, "/config/networks/", _network(), ".json");
 
-            config.json = vm.readFile(path);
+            networkConfig.json = vm.readFile(path);
         }
 
-        return config;
+        return networkConfig;
     }
 
     function _loadConfig() internal virtual {
-        string memory rpcAlias = config.getRpcAlias();
+        string memory rpcAlias = networkConfig.getRpcAlias();
 
         chain = getChain(rpcAlias);        
     }

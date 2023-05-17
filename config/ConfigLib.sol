@@ -21,6 +21,18 @@ library ConfigLib {
 
     function getAddress(Config storage config, string memory key) internal returns (address) {
         return config.json.readAddress(string.concat("$.", key));
+    }    
+    
+    function getUint(Config storage config, string memory key) internal returns (uint256) {
+        return config.json.readUint(string.concat("$.", key));
+    }
+
+    function getBytes(Config storage config, string memory key) internal returns (bytes memory) {
+        return config.json.readBytes(string.concat("$.", key));
+    }
+
+    function getBool(Config storage config, string memory key) internal returns (bool) {
+        return config.json.readBool(string.concat("$.", key));
     }
 
     function getAddressArray(Config storage config, string[] memory keys)

@@ -44,3 +44,10 @@ struct Role {
     mapping(bytes32 => bytes32) compValues;
     mapping(bytes32 => bytes32[]) compValuesOneOf;
 }
+
+struct Transaction {
+    address to;
+    uint256 value;
+    bytes data;
+    Operation op;
+}

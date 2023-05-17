@@ -61,6 +61,18 @@ contract TestLog is TestSetup {
         functionSelectors.push(morpho.setIsLiquidateCollateralPaused.selector);
         functionSelectors.push(morpho.setIsP2PDisabled.selector);
         functionSelectors.push(morpho.setIsDeprecated.selector);
+        functionSelectors.push(delayModifier.enableModule.selector);
+        functionSelectors.push(delayModifier.disableModule.selector);
+        functionSelectors.push(delayModifier.execTransactionFromModule.selector);
+        functionSelectors.push(delayModifier.execTransactionFromModuleReturnData.selector);
+        functionSelectors.push(delayModifier.isModuleEnabled.selector);
+        functionSelectors.push(delayModifier.getModulesPaginated.selector);
+        functionSelectors.push(delayModifier.setUp.selector);
+        functionSelectors.push(delayModifier.setTxCooldown.selector);
+        functionSelectors.push(delayModifier.setTxExpiration.selector);
+        functionSelectors.push(delayModifier.setTxNonce.selector);
+        functionSelectors.push(delayModifier.executeNextTx.selector);
+        functionSelectors.push(delayModifier.skipExpired.selector);
     }
 
     function _getTxData(string memory txName) internal returns (Transaction memory transaction) {
@@ -80,9 +92,12 @@ contract TestLog is TestSetup {
     }
 
     function testLogFunctionIsWildcarded() public view {
-        _logFunctionIsWildcarded(0);
-        _logFunctionIsWildcarded(1);
-        _logFunctionIsWildcarded(2);
+        _logFunctionIsWildcarded(0, address(morpho));
+        _logFunctionIsWildcarded(1, address(morpho));
+        _logFunctionIsWildcarded(2, address(morpho));
+        _logFunctionIsWildcarded(0, address(delayModifier));
+        _logFunctionIsWildcarded(1, address(delayModifier));
+        _logFunctionIsWildcarded(2, address(delayModifier));
     }
 
     function _logRoleMembership(uint16 role, address[] memory members) internal view {
@@ -92,10 +107,14 @@ contract TestLog is TestSetup {
         }
     }
 
-    function _logFunctionIsWildcarded(uint16 role) internal view {
-        console2.log(string(abi.encodePacked("Wildcards for role ", uint256(role).toString())));
+    function _logFunctionIsWildcarded(uint16 role, address target) internal view {
+        console2.log(
+            string(
+                abi.encodePacked("Wildcards for role ", uint256(role).toString(), " and target ", target.toHexString())
+            )
+        );
         for (uint256 i; i < functionSelectors.length; i++) {
-            if (roleModifier.functionIsWildcarded(role, address(morpho), functionSelectors[i])) {
+            if (roleModifier.functionIsWildcarded(role, target, functionSelectors[i])) {
                 console2.logBytes4(functionSelectors[i]);
             }
         }

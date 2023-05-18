@@ -13,76 +13,13 @@ contract TestLog is TestSetup {
     using Strings for uint256;
     using Strings for address;
 
-    address[] internal roleMembers;
-    bytes4[] internal functionSelectors;
-
-    Config internal txConfig;
-
     function setUp() public virtual override {
         super.setUp();
-
-        _populateMembersToCheck();
-        _populateFunctionSelectors();
-
         // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
         _addModule(IAvatar(morphoDao), address(this));
         _addModule(IAvatar(operator), address(this));
         Transaction memory transaction = _getTxData("test");
         morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.op);
-    }
-
-    function _populateMembersToCheck() internal {
-        roleMembers.push(address(operator));
-        roleMembers.push(address(morphoDao));
-    }
-
-    function _populateFunctionSelectors() internal {
-        functionSelectors.push(morpho.createMarket.selector);
-        functionSelectors.push(morpho.increaseP2PDeltas.selector);
-        functionSelectors.push(morpho.claimToTreasury.selector);
-        functionSelectors.push(morpho.setPositionsManager.selector);
-        functionSelectors.push(morpho.setRewardsManager.selector);
-        functionSelectors.push(morpho.setTreasuryVault.selector);
-        functionSelectors.push(morpho.setDefaultIterations.selector);
-        functionSelectors.push(morpho.setP2PIndexCursor.selector);
-        functionSelectors.push(morpho.setReserveFactor.selector);
-        functionSelectors.push(morpho.setAssetIsCollateralOnPool.selector);
-        functionSelectors.push(morpho.setAssetIsCollateral.selector);
-        functionSelectors.push(morpho.setIsClaimRewardsPaused.selector);
-        functionSelectors.push(morpho.setIsPaused.selector);
-        functionSelectors.push(morpho.setIsPausedForAllMarkets.selector);
-        functionSelectors.push(morpho.setIsSupplyPaused.selector);
-        functionSelectors.push(morpho.setIsSupplyCollateralPaused.selector);
-        functionSelectors.push(morpho.setIsBorrowPaused.selector);
-        functionSelectors.push(morpho.setIsRepayPaused.selector);
-        functionSelectors.push(morpho.setIsWithdrawPaused.selector);
-        functionSelectors.push(morpho.setIsWithdrawCollateralPaused.selector);
-        functionSelectors.push(morpho.setIsLiquidateBorrowPaused.selector);
-        functionSelectors.push(morpho.setIsLiquidateCollateralPaused.selector);
-        functionSelectors.push(morpho.setIsP2PDisabled.selector);
-        functionSelectors.push(morpho.setIsDeprecated.selector);
-        functionSelectors.push(delayModifier.enableModule.selector);
-        functionSelectors.push(delayModifier.disableModule.selector);
-        functionSelectors.push(delayModifier.execTransactionFromModule.selector);
-        functionSelectors.push(delayModifier.execTransactionFromModuleReturnData.selector);
-        functionSelectors.push(delayModifier.isModuleEnabled.selector);
-        functionSelectors.push(delayModifier.getModulesPaginated.selector);
-        functionSelectors.push(delayModifier.setUp.selector);
-        functionSelectors.push(delayModifier.setTxCooldown.selector);
-        functionSelectors.push(delayModifier.setTxExpiration.selector);
-        functionSelectors.push(delayModifier.setTxNonce.selector);
-        functionSelectors.push(delayModifier.executeNextTx.selector);
-        functionSelectors.push(delayModifier.skipExpired.selector);
-    }
-
-    function _getTxData(string memory txName) internal returns (Transaction memory transaction) {
-        string memory root = vm.projectRoot();
-        string memory path = string.concat(root, "/config/transactions/", txName, ".json");
-        txConfig.json = vm.readFile(path);
-        transaction.to = txConfig.getAddress("to");
-        transaction.value = txConfig.getUint("value");
-        transaction.data = txConfig.getBytes("data");
-        transaction.op = txConfig.getBool("op") ? Operation.DelegateCall : Operation.Call;
     }
 
     function testLogMembers() public view {
@@ -92,12 +29,26 @@ contract TestLog is TestSetup {
     }
 
     function testLogFunctionIsWildcarded() public view {
-        _logFunctionIsWildcarded(0, address(morpho));
-        _logFunctionIsWildcarded(1, address(morpho));
-        _logFunctionIsWildcarded(2, address(morpho));
-        _logFunctionIsWildcarded(0, address(delayModifier));
-        _logFunctionIsWildcarded(1, address(delayModifier));
-        _logFunctionIsWildcarded(2, address(delayModifier));
+        console2.log("-------------------------------------------------------");
+        console2.log("Function wildcards for delay modifier");
+        _logFunctionIsWildcarded(0, address(delayModifier), delaySelectors);
+        _logFunctionIsWildcarded(1, address(delayModifier), delaySelectors);
+        _logFunctionIsWildcarded(2, address(delayModifier), delaySelectors);
+        console2.log("-------------------------------------------------------");
+        console2.log("Function wildcards for Morpho Compound");
+        _logFunctionIsWildcarded(0, address(morphoCompound), mcSelectors);
+        _logFunctionIsWildcarded(1, address(morphoCompound), mcSelectors);
+        _logFunctionIsWildcarded(2, address(morphoCompound), mcSelectors);
+        console2.log("-------------------------------------------------------");
+        console2.log("Function wildcards for Morpho Aave V2");
+        _logFunctionIsWildcarded(0, address(morphoAaveV2), ma2Selectors);
+        _logFunctionIsWildcarded(1, address(morphoAaveV2), ma2Selectors);
+        _logFunctionIsWildcarded(2, address(morphoAaveV2), ma2Selectors);
+        console2.log("-------------------------------------------------------");
+        console2.log("Function wildcards for Morpho Aave V3");
+        _logFunctionIsWildcarded(0, address(morphoAaveV3), ma3Selectors);
+        _logFunctionIsWildcarded(1, address(morphoAaveV3), ma3Selectors);
+        _logFunctionIsWildcarded(2, address(morphoAaveV3), ma3Selectors);
     }
 
     function _logRoleMembership(uint16 role, address[] memory members) internal view {
@@ -107,15 +58,15 @@ contract TestLog is TestSetup {
         }
     }
 
-    function _logFunctionIsWildcarded(uint16 role, address target) internal view {
+    function _logFunctionIsWildcarded(uint16 role, address target, bytes4[] memory selectors) internal view {
         console2.log(
             string(
                 abi.encodePacked("Wildcards for role ", uint256(role).toString(), " and target ", target.toHexString())
             )
         );
-        for (uint256 i; i < functionSelectors.length; i++) {
-            if (roleModifier.functionIsWildcarded(role, target, functionSelectors[i])) {
-                console2.logBytes4(functionSelectors[i]);
+        for (uint256 i; i < selectors.length; i++) {
+            if (roleModifier.functionIsWildcarded(role, target, selectors[i])) {
+                console2.logBytes4(selectors[i]);
             }
         }
         console2.log();

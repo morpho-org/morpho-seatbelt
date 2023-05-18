@@ -12,12 +12,6 @@ library ConfigLib {
 
     string internal constant RPC_ALIAS_PATH = "$.rpcAlias";
     string internal constant FORK_BLOCK_NUMBER_PATH = "$.forkBlockNumber";
-    string internal constant MORPHO_ADMIN_PATH = "$.morphoAdmin";
-    string internal constant MORPHO_DAO_PATH = "$.morphoDao";
-    string internal constant OPERATOR_PATH = "$.operator";
-    string internal constant DELAY_MODIFIER_PATH = "$.delayModifier";
-    string internal constant ROLE_MODIFIER_PATH = "$.roleModifier";
-    string internal constant PROXY_ADMIN_PATH = "$.proxyAdmin";
 
     function getAddress(Config storage config, string memory key) internal returns (address) {
         return config.json.readAddress(string.concat("$.", key));

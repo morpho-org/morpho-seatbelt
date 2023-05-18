@@ -39,6 +39,7 @@ contract TestSetup is Test, Configured {
 
     address[] internal roleMembers;
     bytes4[] internal delaySelectors;
+    bytes4[] internal roleSelectors;
     bytes4[] internal mcSelectors;
     bytes4[] internal ma2Selectors;
     bytes4[] internal ma3Selectors;
@@ -50,6 +51,7 @@ contract TestSetup is Test, Configured {
         _loadConfig();
         _populateMembersToCheck();
         _populateDelaySelectors();
+        _populateRoleSelectors();
         _populateMcSelectors();
         _populateMa2Selectors();
         _populateMa3FunctionSelectors();
@@ -107,6 +109,25 @@ contract TestSetup is Test, Configured {
         delaySelectors.push(delayModifier.setTxNonce.selector);
         delaySelectors.push(delayModifier.executeNextTx.selector);
         delaySelectors.push(delayModifier.skipExpired.selector);
+    }
+
+    function _populateRoleSelectors() internal {
+        roleSelectors.push(roleModifier.setUp.selector);
+        roleSelectors.push(roleModifier.setMultisend.selector);
+        roleSelectors.push(roleModifier.allowTarget.selector);
+        roleSelectors.push(roleModifier.revokeTarget.selector);
+        roleSelectors.push(roleModifier.scopeTarget.selector);
+        roleSelectors.push(roleModifier.scopeAllowFunction.selector);
+        roleSelectors.push(roleModifier.scopeRevokeFunction.selector);
+        roleSelectors.push(roleModifier.scopeFunction.selector);
+        roleSelectors.push(roleModifier.scopeFunctionExecutionOptions.selector);
+        roleSelectors.push(roleModifier.scopeParameter.selector);
+        roleSelectors.push(roleModifier.scopeParameterAsOneOf.selector);
+        roleSelectors.push(roleModifier.unscopeParameter.selector);
+        roleSelectors.push(roleModifier.assignRoles.selector);
+        roleSelectors.push(roleModifier.setDefaultRole.selector);
+        roleSelectors.push(roleModifier.execTransactionWithRole.selector);
+        roleSelectors.push(roleModifier.execTransactionWithRoleReturnData.selector);
     }
 
     function _populateMcSelectors() internal {

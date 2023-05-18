@@ -33,6 +33,11 @@ contract TestLog is TestSetup {
         _logFunctionIsWildcarded(1, address(delayModifier), delaySelectors);
         _logFunctionIsWildcarded(2, address(delayModifier), delaySelectors);
         console2.log("-------------------------------------------------------");
+        console2.log("Function wildcards for role modifier");
+        _logFunctionIsWildcarded(0, address(roleModifier), roleSelectors);
+        _logFunctionIsWildcarded(1, address(roleModifier), roleSelectors);
+        _logFunctionIsWildcarded(2, address(roleModifier), roleSelectors);
+        console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Compound");
         _logFunctionIsWildcarded(0, address(morphoCompound), mcSelectors);
         _logFunctionIsWildcarded(1, address(morphoCompound), mcSelectors);

@@ -3,8 +3,6 @@ pragma solidity ^0.8.13;
 
 import "test/TestSetup.sol";
 
-import {Transaction, Operation} from "src/libraries/Types.sol";
-import {EnumerableSet} from "@openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol";
 import {Strings} from "@openzeppelin-contracts/contracts/utils/Strings.sol";
 
 contract TestLog is TestSetup {

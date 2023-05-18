@@ -1,14 +1,12 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 pragma solidity ^0.8.0;
 
-import {IMorpho} from "@morpho-aave-v3/src/interfaces/IMorpho.sol";
 import {IAvatar} from "src/interfaces/IAvatar.sol";
 
 import {Operation} from "src/libraries/Types.sol";
 
 import {Config, ConfigLib} from "config/ConfigLib.sol";
 import {StdChains, VmSafe} from "@forge-std/StdChains.sol";
-import {Types} from "@morpho-aave-v3/src/libraries/Types.sol";
 
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";

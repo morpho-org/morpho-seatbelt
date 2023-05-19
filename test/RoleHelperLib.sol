@@ -5,8 +5,6 @@ import {Vm} from "@forge-std/Vm.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
 import {TargetAddress, Clearance, ExecutionOptions, ParameterType, Comparison} from "src/libraries/Types.sol";
 
-import {console2} from "@forge-std/console2.sol";
-
 /// @dev The role modifier contract used by Morpho does not have an external getter for the role information.
 ///      This library provides getters to mirror what the getters would be if each mapping member in the roles struct
 ///      had an external getter when used with "using RoleHelperLib for IRoles".

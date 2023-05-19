@@ -71,9 +71,9 @@ contract TestSetup is Test, Configured {
         delayModifier = IDelay(networkConfig.getAddress("delayModifier"));
         roleModifier = IRoles(networkConfig.getAddress("roleModifier"));
         proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
-        morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morpho-compound"));
-        morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morpho-aave-v2"));
-        morphoAaveV3 = IMorphoAaveV3Governance(networkConfig.getAddress("morpho-aave-v3"));
+        morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
+        morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));
+        morphoAaveV3 = IMorphoAaveV3Governance(networkConfig.getAddress("morphoAaveV3"));
     }
 
     function _addModule(IAvatar avatar, address module) internal {

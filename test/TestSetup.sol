@@ -63,7 +63,7 @@ contract TestSetup is Test, Configured {
         if (forkBlockNumber == 0) {
             forkId = vm.createSelectFork(chain.rpcUrl);
         } else {
-            forkId = vm.createSelectFork(chain.rpcUrl, networkConfig.getForkBlockNumber());
+            forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
         }
         morphoAdmin = ISafe(networkConfig.getAddress("morphoAdmin"));
         morphoDao = ISafe(networkConfig.getAddress("morphoDao"));

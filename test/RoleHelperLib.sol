@@ -65,7 +65,7 @@ library RoleHelperLib {
         data = new bytes32[](length);
 
         for (uint256 i; i < length; i++) {
-            data[i] = keccak256(abi.encode(bytes32(uint256(storageSlot) + i)));
+            data[i] = vm.load(address(roleModifier), keccak256(abi.encode(bytes32(uint256(storageSlot) + i))));
         }
     }
 

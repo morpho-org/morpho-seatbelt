@@ -11,18 +11,24 @@ import {console2} from "@forge-std/console2.sol";
 ///      This library provides getters to mirror what the getters would be if each mapping member in the roles struct
 ///      had an external getter when used with "using RoleHelperLib for IRoles".
 library RoleHelperLib {
-    uint256 internal constant ROLE_STORAGE_SLOT = 107;
     Vm private constant vm = Vm(address(uint160(uint256(keccak256("hevm cheat code")))));
+
+    uint256 internal constant ROLE_STORAGE_SLOT = 107;
+    uint256 internal constant ROLES_MEMBERS_SLOT = 0;
+    uint256 internal constant ROLES_TARGETS_SLOT = 1;
+    uint256 internal constant ROLES_FUNCTIONS_SLOT = 2;
+    uint256 internal constant ROLES_COMP_VALUES_SLOT = 3;
+    uint256 internal constant ROLES_COMP_VALUES_ONE_OF_SLOT = 4;
 
     /* GETTERS */
 
     function members(IRoles roleModifier, uint16 role, address member) internal view returns (bool) {
-        bytes32 storageSlot = keccak256(abi.encode(member, roleStorageHash(role, 0)));
+        bytes32 storageSlot = keccak256(abi.encode(member, roleStorageHash(role, ROLES_MEMBERS_SLOT)));
         return abi.decode(abi.encode(vm.load((address(roleModifier)), storageSlot)), (bool));
     }
 
-    function targets(IRoles roleModifier, uint16 role, address member) internal view returns (TargetAddress memory t) {
-        bytes32 storageSlot = keccak256(abi.encode(member, roleStorageHash(role, 1)));
+    function targets(IRoles roleModifier, uint16 role, address target) internal view returns (TargetAddress memory t) {
+        bytes32 storageSlot = keccak256(abi.encode(target, roleStorageHash(role, ROLES_TARGETS_SLOT)));
         uint256 data = uint256(vm.load((address(roleModifier)), storageSlot));
         t.clearance = Clearance(uint8(data));
         t.options = ExecutionOptions(uint8(data >> 8));
@@ -34,7 +40,7 @@ library RoleHelperLib {
         returns (uint256 data)
     {
         bytes32 key = keyForFunctions(targetAddress, functionSig);
-        bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 2)));
+        bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, ROLES_FUNCTIONS_SLOT)));
         data = uint256(vm.load((address(roleModifier)), storageSlot));
     }
 
@@ -44,23 +50,22 @@ library RoleHelperLib {
         returns (bytes32 data)
     {
         bytes32 key = keyForCompValues(targetAddress, functionSig, index);
-        bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 3)));
+        bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, ROLES_COMP_VALUES_SLOT)));
         data = vm.load((address(roleModifier)), storageSlot);
     }
 
-    function compValuesOneOf(
-        IRoles roleModifier,
-        uint16 role,
-        address targetAddress,
-        bytes4 functionSig,
-        uint256 index,
-        uint256 numElements
-    ) internal view returns (bytes32[] memory data) {
+    function compValuesOneOf(IRoles roleModifier, uint16 role, address targetAddress, bytes4 functionSig, uint256 index)
+        internal
+        view
+        returns (bytes32[] memory data)
+    {
         bytes32 key = keyForCompValues(targetAddress, functionSig, index);
-        bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, 4)));
-        data = new bytes32[](numElements);
-        for (uint256 i; i < numElements; i++) {
-            data[i] = vm.load((address(roleModifier)), bytes32(uint256(storageSlot) + i));
+        bytes32 storageSlot = keccak256(abi.encode(key, roleStorageHash(role, ROLES_COMP_VALUES_ONE_OF_SLOT)));
+        uint256 length = uint256(vm.load((address(roleModifier)), storageSlot));
+        data = new bytes32[](length);
+
+        for (uint256 i; i < length; i++) {
+            data[i] = keccak256(abi.encode(bytes32(uint256(storageSlot) + i)));
         }
     }
 

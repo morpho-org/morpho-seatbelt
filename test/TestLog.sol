@@ -55,18 +55,14 @@ contract TestLog is TestSetup {
     }
 
     function _logRoleMembership(uint16 role, address[] memory members) internal view {
-        console2.log(string(abi.encodePacked("Membership for role ", uint256(role).toString())));
+        console2.log("Membership for role %d", role);
         for (uint256 i; i < members.length; i++) {
-            if (roleModifier.members(role, members[i])) console2.log(members[i].toHexString());
+            if (roleModifier.members(role, members[i])) console2.log("%s", members[i]);
         }
     }
 
     function _logFunctionIsWildcarded(uint16 role, address target, bytes4[] memory selectors) internal view {
-        console2.log(
-            string(
-                abi.encodePacked("Wildcards for role ", uint256(role).toString(), " and target ", target.toHexString())
-            )
-        );
+        console2.log("Wildcards for role %d and target %s", role, target);
         for (uint256 i; i < selectors.length; i++) {
             if (roleModifier.functionIsWildcarded(role, target, selectors[i])) {
                 console2.logBytes4(selectors[i]);

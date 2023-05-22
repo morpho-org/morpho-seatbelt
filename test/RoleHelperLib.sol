@@ -163,3 +163,5 @@ library RoleHelperLib {
         paramComp = Comparison((scopeConfig & paramCompMask) >> (index * 2));
     }
 }
+
+using RoleHelperLib for IRoles global;

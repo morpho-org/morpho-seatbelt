@@ -49,3 +49,5 @@ library ConfigLib {
     }
 
 }
+
+using ConfigLib for Config global;

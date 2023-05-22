@@ -21,9 +21,6 @@ import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
 
 contract TestSetup is Test, Configured {
-    using ConfigLib for Config;
-    using RoleHelperLib for IRoles;
-
     uint256 forkId;
 
     ISafe public morphoAdmin;

@@ -11,7 +11,6 @@ interface IMorphoCompoundGovernance {
 
     function setMaxSortedUsers(uint256 _newMaxSortedUsers) external;
     function setDefaultMaxGasForMatching(MaxGasForMatching memory _maxGasForMatching) external;
-    function setIncentivesVault(address _newIncentivesVault) external;
     function setRewardsManager(address _rewardsManagerAddress) external;
     function setPositionsManager(address _positionsManager) external;
     function setInterestRatesManager(address _interestRatesManager) external;
@@ -30,4 +29,5 @@ interface IMorphoCompoundGovernance {
     function setIsLiquidateBorrowPaused(address _poolToken, bool _isPaused) external;
     function claimToTreasury(address[] calldata _poolTokens, uint256[] calldata _amounts) external;
     function createMarket(address _poolToken, uint16[2] calldata _params) external;
+    function setIsDeprecated(address underlying, bool isDeprecated) external;
 }

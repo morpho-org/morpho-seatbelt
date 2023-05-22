@@ -28,4 +28,5 @@ interface IMorphoAaveV2Governance {
     function claimToTreasury(address[] calldata _poolTokens, uint256[] calldata _amounts) external;
     function createMarket(address _underlyingToken, uint16 _reserveFactor, uint16 _p2pIndexCursor) external;
     function increaseP2PDeltas(address _poolToken, uint256 _amount) external;
+    function setIsDeprecated(address underlying, bool isDeprecated) external;
 }

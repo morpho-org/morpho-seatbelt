@@ -133,7 +133,6 @@ contract TestSetup is Test, Configured {
     function _populateMcSelectors() internal {
         mcSelectors.push(morphoCompound.setMaxSortedUsers.selector);
         mcSelectors.push(morphoCompound.setDefaultMaxGasForMatching.selector);
-        mcSelectors.push(morphoCompound.setIncentivesVault.selector);
         mcSelectors.push(morphoCompound.setRewardsManager.selector);
         mcSelectors.push(morphoCompound.setPositionsManager.selector);
         mcSelectors.push(morphoCompound.setInterestRatesManager.selector);

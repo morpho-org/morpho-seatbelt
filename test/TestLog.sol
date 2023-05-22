@@ -3,13 +3,9 @@ pragma solidity ^0.8.13;
 
 import "test/TestSetup.sol";
 
-import {Strings} from "@openzeppelin-contracts/contracts/utils/Strings.sol";
-
 contract TestLog is TestSetup {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
-    using Strings for uint256;
-    using Strings for address;
 
     function setUp() public virtual override {
         super.setUp();

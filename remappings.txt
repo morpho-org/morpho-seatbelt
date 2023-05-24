@@ -1,0 +1,8 @@
+src/=src/
+test/=test/
+config/=config/
+
+@forge-std/=lib/forge-std/src/
+@morpho-aave-v3/=lib/morpho-aave-v3/
+@openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable
+@openzeppelin-contracts/=lib/openzeppelin-contracts

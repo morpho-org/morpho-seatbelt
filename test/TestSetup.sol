@@ -17,6 +17,7 @@ import {ISafe} from "src/interfaces/ISafe.sol";
 import {IDelay} from "src/interfaces/IDelay.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
 
+import "@morpho-token/src/MorphoToken.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
 
@@ -36,6 +37,7 @@ contract TestSetup is Test, Configured {
     IMorphoCompoundGovernance public morphoCompound;
     IMorphoAaveV2Governance public morphoAaveV2;
     IMorphoAaveV3Governance public morphoAaveV3;
+    MorphoToken public morphoToken;
 
     address[] internal roleMembers;
     bytes4[] internal delaySelectors;
@@ -67,6 +69,7 @@ contract TestSetup is Test, Configured {
         }
         morphoAdmin = ISafe(networkConfig.getAddress("morphoAdmin"));
         morphoDao = ISafe(networkConfig.getAddress("morphoDao"));
+        morphoToken = MorphoToken(networkConfig.getAddress("morphoToken"));
         operator = ISafe(networkConfig.getAddress("operator"));
         delayModifier = IDelay(networkConfig.getAddress("delayModifier"));
         roleModifier = IRoles(networkConfig.getAddress("roleModifier"));

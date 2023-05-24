@@ -29,6 +29,8 @@ contract TestSetup is Test, Configured {
 
     ISafe public morphoAdmin;
     ISafe public morphoDao;
+    ISafe public morphoAssociation;
+    ISafe public morphoLabs;
     ISafe public operator;
     IDelay public delayModifier;
     IRoles public roleModifier;
@@ -39,12 +41,29 @@ contract TestSetup is Test, Configured {
     IMorphoAaveV3Governance public morphoAaveV3;
     MorphoToken public morphoToken;
 
+    address internal rewardsDistributorCore;
+    address internal rewardsDistributorVaults;
+
     address[] internal roleMembers;
     bytes4[] internal delaySelectors;
     bytes4[] internal roleSelectors;
     bytes4[] internal mcSelectors;
     bytes4[] internal ma2Selectors;
     bytes4[] internal ma3Selectors;
+
+    address internal maWBTC;
+	address internal maUSDC;
+	address internal maUSDT;
+	address internal maCRV;
+	address internal maWETH;
+	address internal maDAI;
+	address internal mcWTBC;
+	address internal mcUSDT;
+	address internal mcUSDC;
+	address internal mcUNI;
+	address internal mcCOMP;
+	address internal mcWETH;
+	address internal mcDAI;
 
     Config internal txConfig;
 
@@ -67,8 +86,13 @@ contract TestSetup is Test, Configured {
         } else {
             forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
         }
+
+        _loadVaults();
+
         morphoAdmin = ISafe(networkConfig.getAddress("morphoAdmin"));
         morphoDao = ISafe(networkConfig.getAddress("morphoDao"));
+        morphoAssociation = ISafe(networkConfig.getAddress("morphoAssociation"));
+        morphoLabs = ISafe(networkConfig.getAddress("morphoLabs"));
         morphoToken = MorphoToken(networkConfig.getAddress("morphoToken"));
         operator = ISafe(networkConfig.getAddress("operator"));
         delayModifier = IDelay(networkConfig.getAddress("delayModifier"));
@@ -77,6 +101,8 @@ contract TestSetup is Test, Configured {
         morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
         morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));
         morphoAaveV3 = IMorphoAaveV3Governance(networkConfig.getAddress("morphoAaveV3"));
+        rewardsDistributorCore = networkConfig.getAddress("rewardsDistributorCore");
+        rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");
     }
 
     function _addModule(IAvatar avatar, address module) internal {
@@ -203,5 +229,21 @@ contract TestSetup is Test, Configured {
         ma3Selectors.push(morphoAaveV3.setIsLiquidateCollateralPaused.selector);
         ma3Selectors.push(morphoAaveV3.setIsP2PDisabled.selector);
         ma3Selectors.push(morphoAaveV3.setIsDeprecated.selector);
+    }
+
+    function _loadVaults() internal {
+        maWBTC = networkConfig.getAddress("maWBTC");
+        maUSDC = networkConfig.getAddress("maUSDC");
+        maUSDT = networkConfig.getAddress("maUSDT");
+        maCRV = networkConfig.getAddress("maCRV");
+        maWETH = networkConfig.getAddress("maWETH");
+        maDAI = networkConfig.getAddress("maDAI");
+        mcWTBC = networkConfig.getAddress("mcWTBC");
+        mcUSDT = networkConfig.getAddress("mcUSDT");
+        mcUSDC = networkConfig.getAddress("mcUSDC");
+        mcUNI = networkConfig.getAddress("mcUNI");
+        mcCOMP = networkConfig.getAddress("mcCOMP");
+        mcWETH = networkConfig.getAddress("mcWETH");
+        mcDAI = networkConfig.getAddress("mcDAI");
     }
 }

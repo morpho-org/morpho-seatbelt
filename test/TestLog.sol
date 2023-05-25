@@ -25,29 +25,29 @@ contract TestLog is TestSetup {
     function testLogFunctionIsWildcarded() public view {
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for delay modifier");
-        _logFunctionIsWildcarded(0, address(delayModifier), delaySelectors);
-        _logFunctionIsWildcarded(1, address(delayModifier), delaySelectors);
-        _logFunctionIsWildcarded(2, address(delayModifier), delaySelectors);
+        _logFunctionIsWildcarded(0, address(delayModifier), delaySelectors, delaySelectorFunctionMap);
+        _logFunctionIsWildcarded(1, address(delayModifier), delaySelectors, delaySelectorFunctionMap);
+        _logFunctionIsWildcarded(2, address(delayModifier), delaySelectors, delaySelectorFunctionMap);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for role modifier");
-        _logFunctionIsWildcarded(0, address(roleModifier), roleSelectors);
-        _logFunctionIsWildcarded(1, address(roleModifier), roleSelectors);
-        _logFunctionIsWildcarded(2, address(roleModifier), roleSelectors);
+        _logFunctionIsWildcarded(0, address(roleModifier), roleSelectors, roleSelectorFunctionMap);
+        _logFunctionIsWildcarded(1, address(roleModifier), roleSelectors, roleSelectorFunctionMap);
+        _logFunctionIsWildcarded(2, address(roleModifier), roleSelectors, roleSelectorFunctionMap);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Compound");
-        _logFunctionIsWildcarded(0, address(morphoCompound), mcSelectorsOperator);
-        _logFunctionIsWildcarded(1, address(morphoCompound), mcSelectorsOperator);
-        _logFunctionIsWildcarded(2, address(morphoCompound), mcSelectorsOperator);
+        _logFunctionIsWildcarded(0, address(morphoCompound), mcSelectorsOperator, mcSelectorFunctionMap);
+        _logFunctionIsWildcarded(1, address(morphoCompound), mcSelectorsOperator, mcSelectorFunctionMap);
+        _logFunctionIsWildcarded(2, address(morphoCompound), mcSelectorsOperator, mcSelectorFunctionMap);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Aave V2");
-        _logFunctionIsWildcarded(0, address(morphoAaveV2), ma2SelectorsOperator);
-        _logFunctionIsWildcarded(1, address(morphoAaveV2), ma2SelectorsOperator);
-        _logFunctionIsWildcarded(2, address(morphoAaveV2), ma2SelectorsOperator);
+        _logFunctionIsWildcarded(0, address(morphoAaveV2), ma2SelectorsOperator, ma2SelectorFunctionMap);
+        _logFunctionIsWildcarded(1, address(morphoAaveV2), ma2SelectorsOperator, ma2SelectorFunctionMap);
+        _logFunctionIsWildcarded(2, address(morphoAaveV2), ma2SelectorsOperator, ma2SelectorFunctionMap);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Aave V3");
-        _logFunctionIsWildcarded(0, address(morphoAaveV3), ma3SelectorsOperator);
-        _logFunctionIsWildcarded(1, address(morphoAaveV3), ma3SelectorsOperator);
-        _logFunctionIsWildcarded(2, address(morphoAaveV3), ma3SelectorsOperator);
+        _logFunctionIsWildcarded(0, address(morphoAaveV3), ma3SelectorsOperator, ma3SelectorFunctionMap);
+        _logFunctionIsWildcarded(1, address(morphoAaveV3), ma3SelectorsOperator, ma3SelectorFunctionMap);
+        _logFunctionIsWildcarded(2, address(morphoAaveV3), ma3SelectorsOperator, ma3SelectorFunctionMap);
     }
 
     function _logRoleMembership(uint16 role, address[] memory members) internal view {
@@ -57,12 +57,17 @@ contract TestLog is TestSetup {
         }
     }
 
-    function _logFunctionIsWildcarded(uint16 role, address target, bytes4[] memory selectors) internal view {
+    function _logFunctionIsWildcarded(
+        uint16 role,
+        address target,
+        bytes4[] memory selectors,
+        mapping(bytes4 => string) storage selectorFunctionMap
+    ) internal view {
         console2.log("Wildcards for role %d and target %s", role, target);
         uint256 counter;
         for (uint256 i; i < selectors.length; i++) {
             if (roleModifier.functionIsWildcarded(role, target, selectors[i])) {
-                console2.logBytes4(selectors[i]);
+                console2.logString(selectorFunctionMap[selectors[i]]);
                 counter++;
             }
         }

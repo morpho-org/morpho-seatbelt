@@ -50,6 +50,13 @@ contract TestSetup is Test, Configured {
     bytes4[] internal ma2SelectorsAdmin;
     bytes4[] internal ma3SelectorsAdmin;
 
+    mapping(bytes4 => string) mcSelectorFunctionMap;
+    mapping(bytes4 => string) ma2SelectorFunctionMap;
+    mapping(bytes4 => string) ma3SelectorFunctionMap;
+
+    mapping(bytes4 => string) delaySelectorFunctionMap;
+    mapping(bytes4 => string) roleSelectorFunctionMap;
+
     Config internal txConfig;
 
     function setUp() public virtual {
@@ -61,6 +68,11 @@ contract TestSetup is Test, Configured {
         _populateMcFunctionSelectors();
         _populateMa2FunctionSelectors();
         _populateMa3FunctionSelectors();
+        _populateMcMappingSelectorsFunctionName();
+        _populateMa2MappingSelectorsFunctionName();
+        _populateMa3MappingSelectorsFunctionName();
+        _populateRoleMappingSelectorsFunctionName();
+        _populateDelayMappingSelectorsFunctionName();
     }
 
     function _loadConfig() internal virtual override {
@@ -102,6 +114,24 @@ contract TestSetup is Test, Configured {
         transaction.op = txConfig.getBool("op") ? Operation.DelegateCall : Operation.Call;
     }
 
+    function _populateDelayMappingSelectorsFunctionName() internal {
+        delaySelectorFunctionMap[delayModifier.enableModule.selector] = string("DelayModifier.enableModule");
+        delaySelectorFunctionMap[delayModifier.disableModule.selector] = string("DelayModifier.disableModule");
+        delaySelectorFunctionMap[delayModifier.execTransactionFromModule.selector] =
+            string("DelayModifier.execTransactionFromModule");
+        delaySelectorFunctionMap[delayModifier.execTransactionFromModuleReturnData.selector] =
+            string("DelayModifier.execTransactionFromModuleReturnData");
+        delaySelectorFunctionMap[delayModifier.isModuleEnabled.selector] = string("DelayModifier.isModuleEnabled");
+        delaySelectorFunctionMap[delayModifier.getModulesPaginated.selector] =
+            string("DelayModifier.getModulesPaginated");
+        delaySelectorFunctionMap[delayModifier.setUp.selector] = string("DelayModifier.setUp");
+        delaySelectorFunctionMap[delayModifier.setTxCooldown.selector] = string("DelayModifier.setTxCooldown");
+        delaySelectorFunctionMap[delayModifier.setTxExpiration.selector] = string("DelayModifier.setTxExpiration");
+        delaySelectorFunctionMap[delayModifier.setTxNonce.selector] = string("DelayModifier.setTxNonce");
+        delaySelectorFunctionMap[delayModifier.executeNextTx.selector] = string("DelayModifier.executeNextTx");
+        delaySelectorFunctionMap[delayModifier.skipExpired.selector] = string("DelayModifier.skipExpired");
+    }
+
     function _populateDelaySelectors() internal {
         delaySelectors.push(delayModifier.enableModule.selector);
         delaySelectors.push(delayModifier.disableModule.selector);
@@ -118,6 +148,29 @@ contract TestSetup is Test, Configured {
 
         /// Adds to invalidate transaction on the Delay Modifier.
         delaySelectorsAllowedDao.push(delayModifier.setTxNonce.selector);
+    }
+
+    function _populateRoleMappingSelectorsFunctionName() internal {
+        roleSelectorFunctionMap[roleModifier.setUp.selector] = string("RoleModifier.setUp");
+        roleSelectorFunctionMap[roleModifier.setMultisend.selector] = string("RoleModifier.setMultisend");
+        roleSelectorFunctionMap[roleModifier.allowTarget.selector] = string("RoleModifier.allowTarget");
+        roleSelectorFunctionMap[roleModifier.revokeTarget.selector] = string("RoleModifier.revokeTarget");
+        roleSelectorFunctionMap[roleModifier.scopeTarget.selector] = string("RoleModifier.scopeTarget");
+        roleSelectorFunctionMap[roleModifier.scopeAllowFunction.selector] = string("RoleModifier.scopeAllowFunction");
+        roleSelectorFunctionMap[roleModifier.scopeRevokeFunction.selector] = string("RoleModifier.scopeRevokeFunction");
+        roleSelectorFunctionMap[roleModifier.scopeFunction.selector] = string("RoleModifier.scopeFunction");
+        roleSelectorFunctionMap[roleModifier.scopeFunctionExecutionOptions.selector] =
+            string("RoleModifier.scopeFunctionExecutionOptions");
+        roleSelectorFunctionMap[roleModifier.scopeParameter.selector] = string("RoleModifier.scopeParameter");
+        roleSelectorFunctionMap[roleModifier.scopeParameterAsOneOf.selector] =
+            string("RoleModifier.scopeParameterAsOneOf");
+        roleSelectorFunctionMap[roleModifier.unscopeParameter.selector] = string("RoleModifier.unscopeParameter");
+        roleSelectorFunctionMap[roleModifier.assignRoles.selector] = string("RoleModifier.assignRoles");
+        roleSelectorFunctionMap[roleModifier.setDefaultRole.selector] = string("RoleModifier.setDefaultRole");
+        roleSelectorFunctionMap[roleModifier.execTransactionWithRole.selector] =
+            string("RoleModifier.execTransactionWithRole");
+        roleSelectorFunctionMap[roleModifier.execTransactionWithRoleReturnData.selector] =
+            string("RoleModifier.execTransactionWithRoleReturnData");
     }
 
     function _populateRoleSelectors() internal {
@@ -137,6 +190,39 @@ contract TestSetup is Test, Configured {
         roleSelectors.push(roleModifier.setDefaultRole.selector);
         roleSelectors.push(roleModifier.execTransactionWithRole.selector);
         roleSelectors.push(roleModifier.execTransactionWithRoleReturnData.selector);
+    }
+
+    function _populateMcMappingSelectorsFunctionName() internal {
+        mcSelectorFunctionMap[morphoCompound.setDefaultMaxGasForMatching.selector] =
+            string("morphoCompound.setDefaultMaxGasForMatching");
+        mcSelectorFunctionMap[morphoCompound.setRewardsManager.selector] = string("morphoCompound.setRewardsManager");
+        mcSelectorFunctionMap[morphoCompound.setPositionsManager.selector] =
+            string("morphoCompound.setPositionsManager");
+        mcSelectorFunctionMap[morphoCompound.setInterestRatesManager.selector] =
+            string("morphoCompound.setInterestRatesManager");
+        mcSelectorFunctionMap[morphoCompound.setTreasuryVault.selector] = string("morphoCompound.setTreasuryVault");
+        mcSelectorFunctionMap[morphoCompound.setDustThreshold.selector] = string("morphoCompound.setDustThreshold");
+        mcSelectorFunctionMap[morphoCompound.setReserveFactor.selector] = string("morphoCompound.setReserveFactor");
+        mcSelectorFunctionMap[morphoCompound.claimToTreasury.selector] = string("morphoCompound.claimToTreasury");
+        mcSelectorFunctionMap[morphoCompound.createMarket.selector] = string("morphoCompound.createMarket");
+        mcSelectorFunctionMap[morphoCompound.setIsDeprecated.selector] = string("morphoCompound.setIsDeprecated");
+
+        mcSelectorFunctionMap[morphoCompound.setMaxSortedUsers.selector] = string("morphoCompound.setMaxSortedUsers");
+        mcSelectorFunctionMap[morphoCompound.setIsP2PDisabled.selector] = string("morphoCompound.setIsP2PDisabled");
+        mcSelectorFunctionMap[morphoCompound.setP2PIndexCursor.selector] = string("morphoCompound.setP2PIndexCursor");
+        mcSelectorFunctionMap[morphoCompound.setIsPausedForAllMarkets.selector] =
+            string("morphoCompound.setIsPausedForAllMarkets");
+        mcSelectorFunctionMap[morphoCompound.setIsClaimRewardsPaused.selector] =
+            string("morphoCompound.setIsClaimRewardsPaused");
+        mcSelectorFunctionMap[morphoCompound.setIsSupplyPaused.selector] = string("morphoCompound.setIsSupplyPaused");
+        mcSelectorFunctionMap[morphoCompound.setIsBorrowPaused.selector] = string("morphoCompound.setIsBorrowPaused");
+        mcSelectorFunctionMap[morphoCompound.setIsWithdrawPaused.selector] =
+            string("morphoCompound.setIsWithdrawPaused");
+        mcSelectorFunctionMap[morphoCompound.setIsRepayPaused.selector] = string("morphoCompound.setIsRepayPaused");
+        mcSelectorFunctionMap[morphoCompound.setIsLiquidateCollateralPaused.selector] =
+            string("morphoCompound.setIsLiquidateCollateralPaused");
+        mcSelectorFunctionMap[morphoCompound.setIsLiquidateBorrowPaused.selector] =
+            string("morphoCompound.setIsLiquidateBorrowPaused");
     }
 
     /// @dev 3 threes others selectors are enabled for the operator on Morpho-Compound
@@ -167,6 +253,37 @@ contract TestSetup is Test, Configured {
         mcSelectorsOperator.push(morphoCompound.setIsLiquidateBorrowPaused.selector);
     }
 
+    function _populateMa2MappingSelectorsFunctionName() internal {
+        ma2SelectorFunctionMap[morphoAaveV2.setExitPositionsManager.selector] =
+            string("morphoAaveV2.setExitPositionsManager");
+        ma2SelectorFunctionMap[morphoAaveV2.setEntryPositionsManager.selector] =
+            string("morphoAaveV2.setEntryPositionsManager");
+        ma2SelectorFunctionMap[morphoAaveV2.setInterestRatesManager.selector] =
+            string("morphoAaveV2.setInterestRatesManager");
+        ma2SelectorFunctionMap[morphoAaveV2.setTreasuryVault.selector] = string("morphoAaveV2.setTreasuryVault");
+        ma2SelectorFunctionMap[morphoAaveV2.createMarket.selector] = string("morphoAaveV2.createMarket");
+        ma2SelectorFunctionMap[morphoAaveV2.setReserveFactor.selector] = string("morphoAaveV2.setReserveFactor");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsDeprecated.selector] = string("morphoAaveV2.setIsDeprecated");
+
+        ma2SelectorFunctionMap[morphoAaveV2.claimToTreasury.selector] = string("morphoAaveV2.claimToTreasury");
+        ma2SelectorFunctionMap[morphoAaveV2.setMaxSortedUsers.selector] = string("morphoAaveV2.setMaxSortedUsers");
+        ma2SelectorFunctionMap[morphoAaveV2.setDefaultMaxGasForMatching.selector] =
+            string("morphoAaveV2.setDefaultMaxGasForMatching");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsP2PDisabled.selector] = string("morphoAaveV2.setIsP2PDisabled");
+        ma2SelectorFunctionMap[morphoAaveV2.setP2PIndexCursor.selector] = string("morphoAaveV2.setP2PIndexCursor");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsPausedForAllMarkets.selector] =
+            string("morphoAaveV2.setIsPausedForAllMarkets");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsSupplyPaused.selector] = string("morphoAaveV2.setIsSupplyPaused");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsBorrowPaused.selector] = string("morphoAaveV2.setIsBorrowPaused");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsWithdrawPaused.selector] = string("morphoAaveV2.setIsWithdrawPaused");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsRepayPaused.selector] = string("morphoAaveV2.setIsRepayPaused");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsLiquidateCollateralPaused.selector] =
+            string("morphoAaveV2.setIsLiquidateCollateralPaused");
+        ma2SelectorFunctionMap[morphoAaveV2.setIsLiquidateBorrowPaused.selector] =
+            string("morphoAaveV2.setIsLiquidateBorrowPaused");
+        ma2SelectorFunctionMap[morphoAaveV2.increaseP2PDeltas.selector] = string("morphoAaveV2.increaseP2PDeltas");
+    }
+
     function _populateMa2FunctionSelectors() internal {
         ma2SelectorsAdmin.push(morphoAaveV2.setExitPositionsManager.selector);
         ma2SelectorsAdmin.push(morphoAaveV2.setEntryPositionsManager.selector);
@@ -189,6 +306,41 @@ contract TestSetup is Test, Configured {
         ma2SelectorsOperator.push(morphoAaveV2.setIsLiquidateCollateralPaused.selector);
         ma2SelectorsOperator.push(morphoAaveV2.setIsLiquidateBorrowPaused.selector);
         ma2SelectorsOperator.push(morphoAaveV2.increaseP2PDeltas.selector);
+    }
+
+    function _populateMa3MappingSelectorsFunctionName() internal {
+        ma3SelectorFunctionMap[morphoAaveV3.createMarket.selector] = string("morphoAaveV3.createMarket");
+        ma3SelectorFunctionMap[morphoAaveV3.setPositionsManager.selector] = string("morphoAaveV3.setPositionsManager");
+        ma3SelectorFunctionMap[morphoAaveV3.setRewardsManager.selector] = string("morphoAaveV3.setRewardsManager");
+        ma3SelectorFunctionMap[morphoAaveV3.setTreasuryVault.selector] = string("morphoAaveV3.setTreasuryVault");
+        ma3SelectorFunctionMap[morphoAaveV3.setReserveFactor.selector] = string("morphoAaveV3.setReserveFactor");
+
+        ma3SelectorFunctionMap[morphoAaveV3.increaseP2PDeltas.selector] = string("morphoAaveV3.increaseP2PDeltas");
+        ma3SelectorFunctionMap[morphoAaveV3.claimToTreasury.selector] = string("morphoAaveV3.claimToTreasury");
+        ma3SelectorFunctionMap[morphoAaveV3.setDefaultIterations.selector] = string("morphoAaveV3.setDefaultIterations");
+        ma3SelectorFunctionMap[morphoAaveV3.setP2PIndexCursor.selector] = string("morphoAaveV3.setP2PIndexCursor");
+        ma3SelectorFunctionMap[morphoAaveV3.setAssetIsCollateralOnPool.selector] =
+            string("morphoAaveV3.setAssetIsCollateralOnPool");
+        ma3SelectorFunctionMap[morphoAaveV3.setAssetIsCollateral.selector] = string("morphoAaveV3.setAssetIsCollateral");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsClaimRewardsPaused.selector] =
+            string("morphoAaveV3.setIsClaimRewardsPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsPaused.selector] = string("morphoAaveV3.setIsPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsPausedForAllMarkets.selector] =
+            string("morphoAaveV3.setIsPausedForAllMarkets");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsSupplyPaused.selector] = string("morphoAaveV3.setIsSupplyPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsSupplyCollateralPaused.selector] =
+            string("morphoAaveV3.setIsSupplyCollateralPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsBorrowPaused.selector] = string("morphoAaveV3.setIsBorrowPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsRepayPaused.selector] = string("morphoAaveV3.setIsRepayPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsWithdrawPaused.selector] = string("morphoAaveV3.setIsWithdrawPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsWithdrawCollateralPaused.selector] =
+            string("morphoAaveV3.setIsWithdrawCollateralPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsLiquidateBorrowPaused.selector] =
+            string("morphoAaveV3.setIsLiquidateBorrowPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsLiquidateCollateralPaused.selector] =
+            string("morphoAaveV3.setIsLiquidateCollateralPaused");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsP2PDisabled.selector] = string("morphoAaveV3.setIsP2PDisabled");
+        ma3SelectorFunctionMap[morphoAaveV3.setIsDeprecated.selector] = string("morphoAaveV3.setIsDeprecated");
     }
 
     function _populateMa3FunctionSelectors() internal {

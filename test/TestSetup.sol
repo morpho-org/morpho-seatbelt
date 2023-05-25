@@ -17,7 +17,7 @@ import {ISafe} from "src/interfaces/ISafe.sol";
 import {IDelay} from "src/interfaces/IDelay.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
 
-import "@morpho-token/src/MorphoToken.sol";
+import {MorphoToken, Token} from "@morpho-token/src/MorphoToken.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
 

@@ -39,6 +39,7 @@ contract TestSetup is Test, Configured {
 
     address[] internal roleMembers;
     bytes4[] internal delaySelectors;
+    bytes4[] internal delaySelectorsAllowedDao;
     bytes4[] internal roleSelectors;
     bytes4[] internal mcSelectorsOperator;
     bytes4[] internal ma2SelectorsOperator;
@@ -112,6 +113,9 @@ contract TestSetup is Test, Configured {
         delaySelectors.push(delayModifier.setTxNonce.selector);
         delaySelectors.push(delayModifier.executeNextTx.selector);
         delaySelectors.push(delayModifier.skipExpired.selector);
+
+        /// Adds to invalidate transaction on the Delay Modifier.
+        delaySelectorsAllowedDao.push(delayModifier.setTxNonce.selector);
     }
 
     function _populateRoleSelectors() internal {
@@ -132,10 +136,10 @@ contract TestSetup is Test, Configured {
         roleSelectors.push(roleModifier.execTransactionWithRole.selector);
         roleSelectors.push(roleModifier.execTransactionWithRoleReturnData.selector);
     }
+
     /// @dev 3 threes others selectors are enabled for the operator on Morpho-Compound
     ///      They correspond to functions that have been deprecated following an upgrade but the changes have not been reflected on the Operator's scope.
     ///      0x324ebc55 for claimToTreasury, 0x7f06f7bd for setDefaultMaxGasForMatching (function with different arguments) and 0xcc567180 for setP2PDisabled.
-
     function _populateMcFunctionSelectors() internal {
         mcSelectorsAdmin.push(morphoCompound.setDefaultMaxGasForMatching.selector);
         mcSelectorsAdmin.push(morphoCompound.setRewardsManager.selector);

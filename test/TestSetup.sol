@@ -20,6 +20,8 @@ import {IRoles} from "src/interfaces/IRoles.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
 
+///@notice The DAO can call all the functions of governance including tthe ones that can be used by Morpho Operator.
+///@notice It just needs to be executed through the Delay Modifier.
 contract TestSetup is Test, Configured {
     using ConfigLib for Config;
     using RoleHelperLib for IRoles;

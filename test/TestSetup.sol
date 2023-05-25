@@ -133,8 +133,8 @@ contract TestSetup is Test, Configured {
         roleSelectors.push(roleModifier.execTransactionWithRoleReturnData.selector);
     }
     /// @dev 3 threes others selectors are enabled for the operator on Morpho-Compound
-    ///      They correspond to function that was not deprecated following a previous upgrade.
-    ///      0x324ebc55 for claimToTreasury, 0x7f06f7bd for setDefaultMaxGasForMatching (funcction with different argument) and 0xcc567180 for setP2PDisabled.
+    ///      They correspond to functions that have been deprecated following an upgrade but the changes have not been reflected on the Operator's scope.
+    ///      0x324ebc55 for claimToTreasury, 0x7f06f7bd for setDefaultMaxGasForMatching (function with different arguments) and 0xcc567180 for setP2PDisabled.
 
     function _populateMcFunctionSelectors() internal {
         mcSelectorsAdmin.push(morphoCompound.setDefaultMaxGasForMatching.selector);

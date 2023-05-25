@@ -5,6 +5,7 @@ import "src/interfaces/IModule.sol";
 import "test/TestSetup.sol";
 
 contract TestDAOSetup is TestSetup {
+    // keccak256("guard_manager.guard.address") = 0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8
     uint256 public constant GUARD_STORAGE_SLOT =
         uint256(0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8);
 
@@ -54,6 +55,6 @@ contract TestDAOSetup is TestSetup {
     /// @dev The guard prevents morphoAdmin's signer to submit any tx on the multisig.
     function testScopeGuard() public {
         assertEq(Ownable(address(scopeGuard)).owner(), address(morphoAdmin));
-        assertEq(address(uint160(uint256(bytes32(morphoAdmin.getStorageAt(GUARD_STORAGE_SLOT, 1))))), scopeGuard);
+        assertEq(abi.decode(morphoAdmin.getStorageAt(GUARD_STORAGE_SLOT, 1), (address)), scopeGuard);
     }
 }

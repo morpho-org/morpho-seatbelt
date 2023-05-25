@@ -52,18 +52,18 @@ contract TestSetup is Test, Configured {
     bytes4[] internal ma3Selectors;
 
     address internal maWBTC;
-	address internal maUSDC;
-	address internal maUSDT;
-	address internal maCRV;
-	address internal maWETH;
-	address internal maDAI;
-	address internal mcWTBC;
-	address internal mcUSDT;
-	address internal mcUSDC;
-	address internal mcUNI;
-	address internal mcCOMP;
-	address internal mcWETH;
-	address internal mcDAI;
+    address internal maUSDC;
+    address internal maUSDT;
+    address internal maCRV;
+    address internal maWETH;
+    address internal maDAI;
+    address internal mcWTBC;
+    address internal mcUSDT;
+    address internal mcUSDC;
+    address internal mcUNI;
+    address internal mcCOMP;
+    address internal mcWETH;
+    address internal mcDAI;
 
     Config internal txConfig;
 

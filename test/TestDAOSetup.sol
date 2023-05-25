@@ -41,9 +41,6 @@ contract TestDAOSetup is TestSetup {
         // morphoAdmin should accept tx from role modifier.
         assertTrue(morphoAdmin.isModuleEnabled(address(roleModifier)));
 
-        // morphoAdmin should accept tx from delay modifier.
-        assertTrue(morphoAdmin.isModuleEnabled(address(roleModifier)));
-
         // morphoDao should not accept tx from role modifier.
         assertFalse(morphoDao.isModuleEnabled(address(roleModifier)));
 

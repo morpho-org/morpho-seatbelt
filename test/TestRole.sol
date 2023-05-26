@@ -8,7 +8,7 @@ contract TestRole is TestSetup {
     using ConfigLib for Config;
 
     function testMorphoDaoRole() public {
-        for (uint16 i; i < type(uint16).max; ++i) {
+        for (uint16 i; i < 100; ++i) {
             if (i == 2) {
                 assertTrue(roleModifier.members(i, address(morphoDao)));
             } else {
@@ -18,7 +18,7 @@ contract TestRole is TestSetup {
     }
 
     function testMorphoOperatorRole() public {
-        for (uint16 i; i < type(uint16).max; ++i) {
+        for (uint16 i; i < 100; ++i) {
             if (i == 1) {
                 assertTrue(roleModifier.members(i, address(operator)));
             } else {

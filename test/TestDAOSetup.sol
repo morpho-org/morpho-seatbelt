@@ -50,6 +50,15 @@ contract TestDAOSetup is TestSetup {
 
         // role modifier should accept tx from morphoDao.
         assertTrue(roleModifier.isModuleEnabled(address(morphoDao)));
+
+        // delay modifier should not accept tx from operator.
+        assertFalse(delayModifier.isModuleEnabled(address(operator)));
+
+        // role modifier should accept tx from operator.
+        assertTrue(roleModifier.isModuleEnabled(address(operator)));
+
+        // operator should not accept tx from role modifier.
+        assertFalse(operator.isModuleEnabled(address(roleModifier)));
     }
 
     /// @dev The guard prevents morphoAdmin's signer to submit any tx on the multisig.

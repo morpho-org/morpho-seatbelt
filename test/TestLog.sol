@@ -25,9 +25,9 @@ contract TestLog is TestSetup {
     function testLogFunctionIsWildcarded() public view {
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for delay modifier");
-        _logFunctionIsWildcarded(0, address(delayModifier), delaySelectors, delaySelectorFunctionMap);
-        _logFunctionIsWildcarded(1, address(delayModifier), delaySelectors, delaySelectorFunctionMap);
-        _logFunctionIsWildcarded(2, address(delayModifier), delaySelectors, delaySelectorFunctionMap);
+        _logFunctionIsWildcarded(0, address(delayModifier), delaySelectorsAllowedDao, delaySelectorFunctionMap);
+        _logFunctionIsWildcarded(1, address(delayModifier), delaySelectorsAllowedDao, delaySelectorFunctionMap);
+        _logFunctionIsWildcarded(2, address(delayModifier), delaySelectorsAllowedDao, delaySelectorFunctionMap);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for role modifier");
         _logFunctionIsWildcarded(0, address(roleModifier), roleSelectors, roleSelectorFunctionMap);

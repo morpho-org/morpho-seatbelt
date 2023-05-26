@@ -7,22 +7,24 @@ contract TestRole is TestSetup {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
 
-    function testMorphoDaoRole(uint256 role) public {
-        assertFalse(roleModifier.members(0, address(morphoDao)), "Role unexpected");
-        assertFalse(roleModifier.members(1, address(morphoDao)), "Role unexpected");
-        assertTrue(roleModifier.members(2, address(morphoDao)), "Role expected");
-
-        uint16 newRole = uint16(bound(role, 3, type(uint256).max));
-        assertFalse(roleModifier.members(newRole, address(morphoDao)));
+    function testMorphoDaoRole() public {
+        for (uint16 i; i < type(uint16).max; ++i) {
+            if (i == 2) {
+                assertTrue(roleModifier.members(i, address(morphoDao)));
+            } else {
+                assertFalse(roleModifier.members(i, address(morphoDao)));
+            }
+        }
     }
 
-    function testMorphoOperatorRole(uint256 role) public {
-        assertFalse(roleModifier.members(0, address(operator)), "Role unexpected");
-        assertTrue(roleModifier.members(1, address(operator)), "Role expected");
-        assertFalse(roleModifier.members(2, address(operator)), "Role unexpected");
-
-        uint16 newRole = uint16(bound(role, 3, type(uint256).max));
-        assertFalse(roleModifier.members(newRole, address(operator)));
+    function testMorphoOperatorRole() public {
+        for (uint16 i; i < type(uint16).max; ++i) {
+            if (i == 1) {
+                assertTrue(roleModifier.members(i, address(operator)));
+            } else {
+                assertFalse(roleModifier.members(i, address(operator)));
+            }
+        }
     }
 
     function testSelectorDelayAllowedForDAO() public {

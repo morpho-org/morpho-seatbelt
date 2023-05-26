@@ -34,6 +34,7 @@ contract TestSetup is Test, Configured {
     ISafe public operator;
     IDelay public delayModifier;
     IRoles public roleModifier;
+    address public scopeGuard;
 
     ProxyAdmin public proxyAdmin;
     IMorphoCompoundGovernance public morphoCompound;
@@ -97,6 +98,7 @@ contract TestSetup is Test, Configured {
         operator = ISafe(networkConfig.getAddress("operator"));
         delayModifier = IDelay(networkConfig.getAddress("delayModifier"));
         roleModifier = IRoles(networkConfig.getAddress("roleModifier"));
+        scopeGuard = networkConfig.getAddress("scopeGuard");
         proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
         morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
         morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));

@@ -13,7 +13,7 @@ contract TestLog is TestSetup {
         _addModule(IAvatar(morphoDao), address(this));
         _addModule(IAvatar(operator), address(this));
         Transaction memory transaction = _getTxData("test");
-        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.op);
+        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.operation);
     }
 
     function testLogMembers() public view {

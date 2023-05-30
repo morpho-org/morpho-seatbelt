@@ -72,8 +72,6 @@ contract TestSetup is Test, Configured {
     address internal mcWETH;
     address internal mcDAI;
 
-    Config internal txConfig;
-
     function setUp() public virtual {
         _initConfig();
         _loadConfig();
@@ -121,16 +119,6 @@ contract TestSetup is Test, Configured {
     function _populateMembersToCheck() internal {
         roleMembers.push(address(operator));
         roleMembers.push(address(morphoDao));
-    }
-
-    function _getTxData(string memory txName) internal returns (Transaction memory transaction) {
-        string memory root = vm.projectRoot();
-        string memory path = string.concat(root, "/config/transactions/", txName, ".json");
-        txConfig.json = vm.readFile(path);
-        transaction.to = txConfig.getAddress("to");
-        transaction.value = txConfig.getUint("value");
-        transaction.data = txConfig.getBytes("data");
-        transaction.op = txConfig.getBool("op") ? Operation.DelegateCall : Operation.Call;
     }
 
     function _populateDelaySelectors() internal {

@@ -25,7 +25,7 @@ Morpho Seatbelt provides a framework for testing governance transactions to upda
 
 ## Questions & Feedback
 
-For any question or feedback you can join the Morpho [discord](https://discord.gg/BWXbJMHMdz).
+For any question or feedback you can join the Morpho [discord](https://discord.morpho.xyz).
 
 ---
 

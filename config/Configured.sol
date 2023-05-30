@@ -27,6 +27,14 @@ contract Configured is StdChains {
         }
     }
 
+    function _transactionName() internal view virtual returns (string memory) {
+        try vm.envString("TRANSACTION_NAME") returns (string memory transactionName) {
+            return transactionName;
+        } catch {
+            return "test";
+        }
+    }
+
     function _initConfig() internal returns (Config storage) {
         if (bytes(networkConfig.json).length == 0) {
             string memory root = vm.projectRoot();

@@ -35,19 +35,19 @@ contract TestLog is TestSetup {
         _logFunctionIsWildcarded(2, address(roleModifier), roleSelectors);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Compound");
-        _logFunctionIsWildcarded(0, address(morphoCompound), mcSelectors);
-        _logFunctionIsWildcarded(1, address(morphoCompound), mcSelectors);
-        _logFunctionIsWildcarded(2, address(morphoCompound), mcSelectors);
+        _logFunctionIsWildcarded(0, address(morphoCompound), mcSelectorsOperator);
+        _logFunctionIsWildcarded(1, address(morphoCompound), mcSelectorsOperator);
+        _logFunctionIsWildcarded(2, address(morphoCompound), mcSelectorsOperator);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Aave V2");
-        _logFunctionIsWildcarded(0, address(morphoAaveV2), ma2Selectors);
-        _logFunctionIsWildcarded(1, address(morphoAaveV2), ma2Selectors);
-        _logFunctionIsWildcarded(2, address(morphoAaveV2), ma2Selectors);
+        _logFunctionIsWildcarded(0, address(morphoAaveV2), ma2SelectorsOperator);
+        _logFunctionIsWildcarded(1, address(morphoAaveV2), ma2SelectorsOperator);
+        _logFunctionIsWildcarded(2, address(morphoAaveV2), ma2SelectorsOperator);
         console2.log("-------------------------------------------------------");
         console2.log("Function wildcards for Morpho Aave V3");
-        _logFunctionIsWildcarded(0, address(morphoAaveV3), ma3Selectors);
-        _logFunctionIsWildcarded(1, address(morphoAaveV3), ma3Selectors);
-        _logFunctionIsWildcarded(2, address(morphoAaveV3), ma3Selectors);
+        _logFunctionIsWildcarded(0, address(morphoAaveV3), ma3SelectorsOperator);
+        _logFunctionIsWildcarded(1, address(morphoAaveV3), ma3SelectorsOperator);
+        _logFunctionIsWildcarded(2, address(morphoAaveV3), ma3SelectorsOperator);
     }
 
     function _logRoleMembership(uint16 role, address[] memory members) internal view {
@@ -59,10 +59,15 @@ contract TestLog is TestSetup {
 
     function _logFunctionIsWildcarded(uint16 role, address target, bytes4[] memory selectors) internal view {
         console2.log("Wildcards for role %d and target %s", role, target);
+        uint256 counter;
         for (uint256 i; i < selectors.length; i++) {
             if (roleModifier.functionIsWildcarded(role, target, selectors[i])) {
                 console2.logBytes4(selectors[i]);
+                counter++;
             }
+        }
+        if (counter != 0) {
+            console2.log("Number of functions expected: %d, Real number: %s", selectors.length, counter);
         }
         console2.log();
     }

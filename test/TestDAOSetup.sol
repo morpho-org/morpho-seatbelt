@@ -69,7 +69,11 @@ contract TestDAOSetup is TestSetup {
 
     function testThresholdSafe() public {
         assertEq(operator.getThreshold(), 3, "Wrong Threshold for Operator");
-        assertEq(morphoDao.getThreshold(), 5, "Wrong Operator Threshold");
+        assertEq(morphoDao.getThreshold(), 5, "Wrong Threshold for DAO");
     }
 
+    function testOwner() public {
+        assertEq(operator.getOwners().length, 9, "Wrong number of owner for Operator");
+        assertEq(operator.getOwners().length, 9, "Wrong number of owner for DAO");
+    }
 }

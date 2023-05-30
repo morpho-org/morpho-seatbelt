@@ -9,7 +9,8 @@
 
 ## Overview
 
-Morpho Seatbelt provides a framework for testing governance transactions to update Morpho Compound, Morpho AAVE V2, or Morpho AAVE V3. Morpho utilizes the [Zodiac](https://github.com/gnosis/zodiac) collection of tools to enforce transaction delays and restrict certain functions to addresses with an appropriate role. Some key utilities included are reading gnosis safe transactions from a json, reading key internal state variables of contracts without external getters, and minimal interfaces to limit dependencies. 
+Morpho Seatbelt provides a framework for testing governance transactions to update Morpho Optimizers. Morpho utilizes the [Zodiac](https://github.com/gnosis/zodiac) collection of tools to enforce transaction delays and restrict certain functions to addresses with an appropriate role. Some key utilities included are reading gnosis safe transactions from a json, reading key internal state variables of contracts without external getters, and minimal interfaces to limit dependencies. 
+
 
 ---
 

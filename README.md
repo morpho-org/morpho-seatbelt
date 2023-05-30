@@ -30,4 +30,4 @@ For any question or feedback you can send an email to [merlin@morpho.xyz](mailto
 
 ## Licensing
 
-The code is under the GNU AFFERO GENERAL PUBLIC LICENSE v3.0, see [`LICENSE`](./LICENSE).
+The code is under the MIT License, see [`LICENSE`](./LICENSE).

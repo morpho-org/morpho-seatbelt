@@ -66,4 +66,10 @@ contract TestDAOSetup is TestSetup {
         assertEq(Ownable(address(scopeGuard)).owner(), address(morphoAdmin));
         assertEq(abi.decode(morphoAdmin.getStorageAt(GUARD_STORAGE_SLOT, 1), (address)), scopeGuard);
     }
+
+    function testThresholdSafe() public {
+        assertEq(operator.getThreshold(), 3, "Wrong Threshold for Operator");
+        assertEq(morphoDao.getThreshold(), 5, "Wrong Operator Threshold");
+    }
+
 }

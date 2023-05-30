@@ -44,6 +44,8 @@ contract TestSetup is Test, Configured {
     IMorphoAaveV3Governance public morphoAaveV3;
     MorphoToken public morphoToken;
 
+    address[] internal owners;
+
     address internal rewardsDistributorCore;
     address internal rewardsDistributorVaults;
 
@@ -95,6 +97,8 @@ contract TestSetup is Test, Configured {
         }
 
         _loadVaults();
+
+        _loadOwners();
 
         morphoAdmin = ISafe(networkConfig.getAddress("morphoAdmin"));
         morphoDao = ISafe(networkConfig.getAddress("morphoDao"));
@@ -264,5 +268,9 @@ contract TestSetup is Test, Configured {
         mcCOMP = networkConfig.getAddress("mcCOMP");
         mcWETH = networkConfig.getAddress("mcWETH");
         mcDAI = networkConfig.getAddress("mcDAI");
+    }
+
+    function _loadOwners() internal {
+        owners = networkConfig.getOwners();
     }
 }

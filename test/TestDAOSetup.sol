@@ -72,8 +72,35 @@ contract TestDAOSetup is TestSetup {
         assertEq(morphoDao.getThreshold(), 5, "Wrong Threshold for DAO");
     }
 
-    function testOwner() public {
-        assertEq(operator.getOwners().length, 9, "Wrong number of owner for Operator");
-        assertEq(operator.getOwners().length, 9, "Wrong number of owner for DAO");
+    function testRightOwnerMorphoDAO() public {
+        address[] memory ownersDao = morphoDao.getOwners();
+        assertEq(owners.length, ownersDao.length, "Wrong number of owner for DAO");
+        bool success;
+        for (uint256 i; i < ownersDao.length; i++) {
+            success = false;
+            for (uint256 j; j < owners.length; j++) {
+                if (ownersDao[i] == owners[j]) {
+                    success = true;
+                    break;
+                }
+            }
+            assertTrue(success, "Owner not expected");
+        }
+    }
+
+    function testRightOwnerMorphoOperator() public {
+        address[] memory ownersOperator = operator.getOwners();
+        assertEq(owners.length, ownersOperator.length, "Wrong number of owner for DAO");
+        bool success;
+        for (uint256 i; i < ownersOperator.length; i++) {
+            success = false;
+            for (uint256 j; j < owners.length; j++) {
+                if (ownersOperator[i] == owners[j]) {
+                    success = true;
+                    break;
+                }
+            }
+            assertTrue(success, "Owner not expected");
+        }
     }
 }

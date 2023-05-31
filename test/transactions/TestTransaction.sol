@@ -12,7 +12,7 @@ contract TestTransaction is TestSetup {
         // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
         _addModule(IAvatar(morphoDao), address(this));
         _addModule(IAvatar(operator), address(this));
-        _execute(_transactionName());
+        _execute(_txName());
     }
 
     function _execute(string memory txName) internal virtual {

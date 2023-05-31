@@ -27,8 +27,8 @@ contract Configured is StdChains {
         }
     }
 
-    function _transactionName() internal view virtual returns (string memory) {
-        try vm.envString("TRANSACTION_NAME") returns (string memory transactionName) {
+    function _txName() internal view virtual returns (string memory) {
+        try vm.envString("TX_NAME") returns (string memory transactionName) {
             return transactionName;
         } catch {
             return "test";

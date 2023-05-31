@@ -133,6 +133,16 @@ contract TestSetup is Test, Configured {
         transaction.op = txConfig.getBool("op") ? Operation.DelegateCall : Operation.Call;
     }
 
+    function _wrapTxData(Transaction memory transaction) internal pure returns (bytes memory) {
+        return abi.encodeWithSelector(
+            IAvatar.execTransactionFromModule.selector,
+            transaction.to,
+            transaction.value,
+            transaction.data,
+            transaction.op
+        );
+    }
+
     function _populateDelaySelectors() internal {
         delaySelectors.push(delayModifier.enableModule.selector);
         delaySelectors.push(delayModifier.disableModule.selector);

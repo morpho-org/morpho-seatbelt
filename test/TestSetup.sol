@@ -81,6 +81,26 @@ contract TestSetup is Test, Configured {
         _populateMcFunctionSelectors();
         _populateMa2FunctionSelectors();
         _populateMa3FunctionSelectors();
+
+        // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
+        _addModule(IAvatar(morphoDao), address(this));
+        _addModule(IAvatar(operator), address(this));
+
+        Transaction memory transaction = _getTxData("test");
+        if (transaction.to != address(0)) {
+            morphoDao.execTransactionFromModule(
+                transaction.to, transaction.value, transaction.data, transaction.operation
+            );
+            Transaction memory transactionExecution = _getTxData("Execution");
+            vm.roll(block.number + 1e6);
+            vm.warp(block.timestamp + 1e6 * 15);
+            delayModifier.executeNextTx(
+                transactionExecution.to,
+                transactionExecution.value,
+                transactionExecution.data,
+                transactionExecution.operation
+            );
+        }
     }
 
     function _loadConfig() internal virtual override {

@@ -81,7 +81,7 @@ contract TestSetup is Test, Configured {
         _populateMcFunctionSelectors();
         _populateMa2FunctionSelectors();
         _populateMa3FunctionSelectors();
-        _executeTestTransaction();
+        _executeTestTransaction("Execution");
     }
 
     function _loadConfig() internal virtual override {
@@ -117,12 +117,12 @@ contract TestSetup is Test, Configured {
         avatar.enableModule(module);
     }
 
-    function _executeTestTransaction() internal {
+    function _executeTestTransaction(string memory filename) internal {
         // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
         _addModule(IAvatar(morphoDao), address(this));
         _addModule(IAvatar(operator), address(this));
 
-        Transaction memory transaction = _getTxData("Execution");
+        Transaction memory transaction = _getTxData(filename);
 
         morphoDao.execTransactionFromModule(address(delayModifier), 0, _wrapTxData(transaction), Operation.Call);
 

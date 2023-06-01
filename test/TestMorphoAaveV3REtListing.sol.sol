@@ -7,6 +7,7 @@ import {IMorphoAaveV3} from "src/interfaces/IMorphoAaveV3.sol";
 contract TestTransaction is TestSetup {
     function testAssertions() public {
         IMorphoAaveV3.Market memory market = morphoAaveV3.market(address(0xae78736Cd615f374D3085123A210448E74Fc6393));
+        
         assertEq(market.underlying, address(0xae78736Cd615f374D3085123A210448E74Fc6393), "Wrong address");
         assertTrue(market.pauseStatuses.isBorrowPaused);
         assertTrue(market.pauseStatuses.isSupplyPaused);

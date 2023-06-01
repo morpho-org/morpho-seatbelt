@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: AGPL-3.0-only
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
 import {IAvatar} from "src/interfaces/IAvatar.sol";
@@ -24,6 +24,14 @@ contract Configured is StdChains {
             return network;
         } catch {
             return "ethereum-mainnet";
+        }
+    }
+
+    function _txName() internal view virtual returns (string memory) {
+        try vm.envString("TX_NAME") returns (string memory transactionName) {
+            return transactionName;
+        } catch {
+            return "test";
         }
     }
 

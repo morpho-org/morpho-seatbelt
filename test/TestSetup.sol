@@ -1,5 +1,5 @@
-// SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: MIT
+pragma solidity >=0.8.0;
 
 import "forge-std/Test.sol";
 
@@ -17,11 +17,12 @@ import {ISafe} from "src/interfaces/ISafe.sol";
 import {IDelay} from "src/interfaces/IDelay.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
 
+import {MorphoToken, Token} from "@morpho-token/src/MorphoToken.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
 
-///@notice The DAO can call all the functions of governance including tthe ones that can be used by Morpho Operator.
-///@notice It just needs to be executed through the Delay Modifier.
+/// @notice The DAO can call all the governance functions including the ones that can be used by Morpho Operator.
+/// @notice It just needs to be executed through the Delay Modifier.
 contract TestSetup is Test, Configured {
     using ConfigLib for Config;
     using RoleHelperLib for IRoles;
@@ -30,14 +31,21 @@ contract TestSetup is Test, Configured {
 
     ISafe public morphoAdmin;
     ISafe public morphoDao;
+    ISafe public morphoAssociation;
+    ISafe public morphoLabs;
     ISafe public operator;
     IDelay public delayModifier;
     IRoles public roleModifier;
+    address public scopeGuard;
 
     ProxyAdmin public proxyAdmin;
     IMorphoCompoundGovernance public morphoCompound;
     IMorphoAaveV2Governance public morphoAaveV2;
     IMorphoAaveV3Governance public morphoAaveV3;
+    MorphoToken public morphoToken;
+
+    address internal rewardsDistributorCore;
+    address internal rewardsDistributorVaults;
 
     address[] internal roleMembers;
     bytes4[] internal delaySelectors;
@@ -50,12 +58,27 @@ contract TestSetup is Test, Configured {
     bytes4[] internal ma2SelectorsAdmin;
     bytes4[] internal ma3SelectorsAdmin;
 
+
     mapping(bytes4 => string) mcSelectorFunctionMap;
     mapping(bytes4 => string) ma2SelectorFunctionMap;
     mapping(bytes4 => string) ma3SelectorFunctionMap;
 
     mapping(bytes4 => string) delaySelectorFunctionMap;
     mapping(bytes4 => string) roleSelectorFunctionMap;
+
+    address internal maWBTC;
+    address internal maUSDC;
+    address internal maUSDT;
+    address internal maCRV;
+    address internal maWETH;
+    address internal maDAI;
+    address internal mcWTBC;
+    address internal mcUSDT;
+    address internal mcUSDC;
+    address internal mcUNI;
+    address internal mcCOMP;
+    address internal mcWETH;
+    address internal mcDAI;
 
     Config internal txConfig;
 
@@ -78,15 +101,24 @@ contract TestSetup is Test, Configured {
         } else {
             forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
         }
+
+        _loadVaults();
+
         morphoAdmin = ISafe(networkConfig.getAddress("morphoAdmin"));
         morphoDao = ISafe(networkConfig.getAddress("morphoDao"));
+        morphoAssociation = ISafe(networkConfig.getAddress("morphoAssociation"));
+        morphoLabs = ISafe(networkConfig.getAddress("morphoLabs"));
+        morphoToken = MorphoToken(networkConfig.getAddress("morphoToken"));
         operator = ISafe(networkConfig.getAddress("operator"));
         delayModifier = IDelay(networkConfig.getAddress("delayModifier"));
         roleModifier = IRoles(networkConfig.getAddress("roleModifier"));
+        scopeGuard = networkConfig.getAddress("scopeGuard");
         proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
         morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
         morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));
         morphoAaveV3 = IMorphoAaveV3Governance(networkConfig.getAddress("morphoAaveV3"));
+        rewardsDistributorCore = networkConfig.getAddress("rewardsDistributorCore");
+        rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");
     }
 
     function _addModule(IAvatar avatar, address module) internal {
@@ -714,5 +746,21 @@ contract TestSetup is Test, Configured {
     ) internal {
         selectorFunctionMap[selector] = functionName;
         selectorList.push(selector);
+    }
+
+    function _loadVaults() internal {
+        maWBTC = networkConfig.getAddress("maWBTC");
+        maUSDC = networkConfig.getAddress("maUSDC");
+        maUSDT = networkConfig.getAddress("maUSDT");
+        maCRV = networkConfig.getAddress("maCRV");
+        maWETH = networkConfig.getAddress("maWETH");
+        maDAI = networkConfig.getAddress("maDAI");
+        mcWTBC = networkConfig.getAddress("mcWTBC");
+        mcUSDT = networkConfig.getAddress("mcUSDT");
+        mcUSDC = networkConfig.getAddress("mcUSDC");
+        mcUNI = networkConfig.getAddress("mcUNI");
+        mcCOMP = networkConfig.getAddress("mcCOMP");
+        mcWETH = networkConfig.getAddress("mcWETH");
+        mcDAI = networkConfig.getAddress("mcDAI");
     }
 }

@@ -49,5 +49,5 @@ struct Transaction {
     address to;
     uint256 value;
     bytes data;
-    Operation op;
+    Operation operation;
 }

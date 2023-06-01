@@ -126,7 +126,7 @@ contract TestSetup is Test, Configured {
 
         morphoDao.execTransactionFromModule(address(delayModifier), 0, _wrapTxData(transaction), Operation.Call);
 
-        vm.warp(block.timestamp + 100_000);
+        vm.warp(block.timestamp + delayModifier.txCooldown());
         delayModifier.executeNextTx(transaction.to, transaction.value, transaction.data, transaction.operation);
     }
 

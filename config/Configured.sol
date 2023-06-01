@@ -15,7 +15,7 @@ contract Configured is StdChains {
     using ConfigLib for Config;
 
     error InvalidOperation();
-    
+
     VmSafe private constant vm = VmSafe(address(uint160(uint256(keccak256("hevm cheat code")))));
 
     Chain internal chain;
@@ -44,7 +44,17 @@ contract Configured is StdChains {
     function _loadConfig() internal virtual {
         string memory rpcAlias = networkConfig.getRpcAlias();
 
-        chain = getChain(rpcAlias);        
+        chain = getChain(rpcAlias);
+    }
+
+    function _wrapTxData(Transaction memory transaction) internal pure returns (bytes memory) {
+        return abi.encodeWithSelector(
+            IAvatar.execTransactionFromModule.selector,
+            transaction.to,
+            transaction.value,
+            transaction.data,
+            transaction.operation
+        );
     }
 
     function _getTxData(string memory txName) internal returns (Transaction memory transaction) {

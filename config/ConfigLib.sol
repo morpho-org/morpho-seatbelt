@@ -15,8 +15,8 @@ library ConfigLib {
 
     function getAddress(Config storage config, string memory key) internal returns (address) {
         return config.json.readAddress(string.concat("$.", key));
-    }    
-    
+    }
+
     function getUint(Config storage config, string memory key) internal returns (uint256) {
         return config.json.readUint(string.concat("$.", key));
     }
@@ -47,5 +47,4 @@ library ConfigLib {
     function getForkBlockNumber(Config storage config) internal returns (uint256) {
         return config.json.readUint(FORK_BLOCK_NUMBER_PATH);
     }
-
 }

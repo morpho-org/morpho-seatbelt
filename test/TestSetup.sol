@@ -11,7 +11,7 @@ import {RoleHelperLib} from "test/RoleHelperLib.sol";
 
 import {IMorphoCompoundGovernance} from "src/interfaces/IMorphoCompoundGovernance.sol";
 import {IMorphoAaveV2Governance} from "src/interfaces/IMorphoAaveV2Governance.sol";
-import {IMorphoAaveV3Governance} from "src/interfaces/IMorphoAaveV3Governance.sol";
+import {IMorphoAaveV3} from "src/interfaces/IMorphoAaveV3.sol";
 import {IAvatar} from "src/interfaces/IAvatar.sol";
 import {ISafe} from "src/interfaces/ISafe.sol";
 import {IDelay} from "src/interfaces/IDelay.sol";
@@ -41,7 +41,7 @@ contract TestSetup is Test, Configured {
     ProxyAdmin public proxyAdmin;
     IMorphoCompoundGovernance public morphoCompound;
     IMorphoAaveV2Governance public morphoAaveV2;
-    IMorphoAaveV3Governance public morphoAaveV3;
+    IMorphoAaveV3 public morphoAaveV3;
     MorphoToken public morphoToken;
 
     address internal rewardsDistributorCore;
@@ -81,26 +81,7 @@ contract TestSetup is Test, Configured {
         _populateMcFunctionSelectors();
         _populateMa2FunctionSelectors();
         _populateMa3FunctionSelectors();
-
-        // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
-        _addModule(IAvatar(morphoDao), address(this));
-        _addModule(IAvatar(operator), address(this));
-
-        Transaction memory transaction = _getTxData("test");
-        if (transaction.to != address(0)) {
-            morphoDao.execTransactionFromModule(
-                transaction.to, transaction.value, transaction.data, transaction.operation
-            );
-            Transaction memory transactionExecution = _getTxData("Execution");
-            vm.roll(block.number + 1e6);
-            vm.warp(block.timestamp + 1e6 * 15);
-            delayModifier.executeNextTx(
-                transactionExecution.to,
-                transactionExecution.value,
-                transactionExecution.data,
-                transactionExecution.operation
-            );
-        }
+        _executeTestTransaction();
     }
 
     function _loadConfig() internal virtual override {
@@ -126,7 +107,7 @@ contract TestSetup is Test, Configured {
         proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
         morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
         morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));
-        morphoAaveV3 = IMorphoAaveV3Governance(networkConfig.getAddress("morphoAaveV3"));
+        morphoAaveV3 = IMorphoAaveV3(networkConfig.getAddress("morphoAaveV3"));
         rewardsDistributorCore = networkConfig.getAddress("rewardsDistributorCore");
         rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");
     }
@@ -134,6 +115,19 @@ contract TestSetup is Test, Configured {
     function _addModule(IAvatar avatar, address module) internal {
         vm.prank(address(avatar));
         avatar.enableModule(module);
+    }
+
+    function _executeTestTransaction() internal {
+        // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
+        _addModule(IAvatar(morphoDao), address(this));
+        _addModule(IAvatar(operator), address(this));
+
+        Transaction memory transaction = _getTxData("Execution");
+
+        morphoDao.execTransactionFromModule(address(delayModifier), 0, _wrapTxData(transaction), Operation.Call);
+
+        vm.warp(block.timestamp + 100_000);
+        delayModifier.executeNextTx(transaction.to, transaction.value, transaction.data, transaction.operation);
     }
 
     function _populateMembersToCheck() internal {

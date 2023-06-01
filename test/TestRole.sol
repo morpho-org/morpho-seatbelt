@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity >=0.8.0;
 
 import "test/TestSetup.sol";
 
@@ -83,11 +83,12 @@ contract TestRole is TestSetup {
         }
     }
 
-    function delaySelectorAllowedForDao(bytes4 selector) internal view returns (bool success) {
+    function delaySelectorAllowedForDao(bytes4 selector) internal view returns (bool) {
         for (uint256 i; i < delaySelectorsAllowedDao.length; ++i) {
             if (selector == delaySelectorsAllowedDao[i]) {
-                success = true;
+                return true;
             }
         }
+        return false;
     }
 }

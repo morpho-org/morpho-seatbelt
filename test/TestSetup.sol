@@ -9,8 +9,8 @@ import {console2} from "@forge-std/console2.sol";
 import {Role, TargetAddress, Transaction, Operation} from "src/libraries/Types.sol";
 import {RoleHelperLib} from "test/RoleHelperLib.sol";
 
-import {IMorphoCompoundGovernance} from "src/interfaces/IMorphoCompoundGovernance.sol";
-import {IMorphoAaveV2Governance} from "src/interfaces/IMorphoAaveV2Governance.sol";
+import {IMorphoCompound} from "src/interfaces/IMorphoCompound.sol";
+import {IMorphoAaveV2} from "src/interfaces/IMorphoAaveV2.sol";
 import {IMorphoAaveV3} from "src/interfaces/IMorphoAaveV3.sol";
 import {IAvatar} from "src/interfaces/IAvatar.sol";
 import {ISafe} from "src/interfaces/ISafe.sol";
@@ -39,8 +39,8 @@ contract TestSetup is Test, Configured {
     address public scopeGuard;
 
     ProxyAdmin public proxyAdmin;
-    IMorphoCompoundGovernance public morphoCompound;
-    IMorphoAaveV2Governance public morphoAaveV2;
+    IMorphoCompound public morphoCompound;
+    IMorphoAaveV2 public morphoAaveV2;
     IMorphoAaveV3 public morphoAaveV3;
     MorphoToken public morphoToken;
 
@@ -105,8 +105,8 @@ contract TestSetup is Test, Configured {
         roleModifier = IRoles(networkConfig.getAddress("roleModifier"));
         scopeGuard = networkConfig.getAddress("scopeGuard");
         proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
-        morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
-        morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));
+        morphoCompound = IMorphoCompound(networkConfig.getAddress("morphoCompound"));
+        morphoAaveV2 = IMorphoAaveV2(networkConfig.getAddress("morphoAaveV2"));
         morphoAaveV3 = IMorphoAaveV3(networkConfig.getAddress("morphoAaveV3"));
         rewardsDistributorCore = networkConfig.getAddress("rewardsDistributorCore");
         rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");

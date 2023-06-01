@@ -10,7 +10,7 @@ out/
 # Node Modules
 node_modules/
 
-# Yarn error log
+# Logs
 yarn-error.log
 
 # Docs

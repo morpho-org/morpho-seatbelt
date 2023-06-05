@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity >=0.8.0;
 
 import "test/TestSetup.sol";
 
@@ -7,14 +7,12 @@ contract TestTransactionREthListing is TestSetup {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
 
-    function setUp() public virtual override {
-        super.setUp();
-    }
+    address internal constant RETH = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
     function testAssertionsOfTransaction() public virtual {
-        IMorphoAaveV3.Market memory market = morphoAaveV3.market(address(0xae78736Cd615f374D3085123A210448E74Fc6393));
+        IMorphoAaveV3.Market memory market = morphoAaveV3.market(RETH);
 
-        assertEq(market.underlying, address(0xae78736Cd615f374D3085123A210448E74Fc6393), "Wrong address");
+        assertEq(market.underlying, RETH, "Wrong address");
         assertTrue(market.pauseStatuses.isBorrowPaused);
         assertTrue(market.pauseStatuses.isSupplyPaused);
         assertTrue(market.pauseStatuses.isRepayPaused);

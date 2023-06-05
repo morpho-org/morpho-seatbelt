@@ -65,6 +65,8 @@ contract Configured is StdChains {
         );
     }
 
+    /// @dev Slicing bytes array data is only possible with bytes in calldata, but internal functions cannot create calldata.
+    ///      So we work around this by doing an external call on this contract to force the data to be in calldata.
     function _unwrapTxData(bytes memory data) internal view returns (Transaction memory transaction) {
         return this.unwrapTxData(data);
     }

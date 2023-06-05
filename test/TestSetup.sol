@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity >=0.8.0;
 
 import "forge-std/Test.sol";
 
@@ -16,6 +16,7 @@ import {IAvatar} from "src/interfaces/IAvatar.sol";
 import {ISafe} from "src/interfaces/ISafe.sol";
 import {IDelay} from "src/interfaces/IDelay.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
+import {Operation} from "src/libraries/Types.sol";
 
 import {MorphoToken, Token} from "@morpho-token/src/MorphoToken.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
@@ -59,7 +60,6 @@ contract TestSetup is Test, Configured {
     bytes4[] internal mcSelectorsAdmin;
     bytes4[] internal ma2SelectorsAdmin;
     bytes4[] internal ma3SelectorsAdmin;
-
 
     mapping(bytes4 => string) mcSelectorFunctionMap;
     mapping(bytes4 => string) ma2SelectorFunctionMap;
@@ -136,10 +136,23 @@ contract TestSetup is Test, Configured {
 
         Transaction memory transaction = _getTxData(filename);
 
-        morphoDao.execTransactionFromModule(address(delayModifier), 0, _wrapTxData(transaction), Operation.Call);
+        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.operation);
 
         vm.warp(block.timestamp + delayModifier.txCooldown());
-        delayModifier.executeNextTx(transaction.to, transaction.value, transaction.data, transaction.operation);
+        uint256 txNonce = delayModifier.txNonce();
+        while (
+            delayModifier.txHash(txNonce)
+                != delayModifier.getTransactionHash(
+                    transaction.to, transaction.value, transaction.data, transaction.operation
+                )
+        ) {
+            ++txNonce;
+        }
+        vm.prank(address(morphoAdmin));
+        delayModifier.setTxNonce(txNonce);
+        (address to, uint256 value, bytes memory data, Operation operation) =
+            abi.decode(transaction.data, (address, uint256, bytes, Operation));
+        delayModifier.executeNextTx(to, value, data, operation);
     }
 
     function _populateMembersToCheck() internal {

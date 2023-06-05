@@ -10,13 +10,14 @@ struct Config {
 library ConfigLib {
     using stdJson for string;
 
+    string internal constant OWNERS_PATH = "$.owners";
     string internal constant RPC_ALIAS_PATH = "$.rpcAlias";
     string internal constant FORK_BLOCK_NUMBER_PATH = "$.forkBlockNumber";
 
     function getAddress(Config storage config, string memory key) internal returns (address) {
         return config.json.readAddress(string.concat("$.", key));
-    }    
-    
+    }
+
     function getUint(Config storage config, string memory key) internal returns (uint256) {
         return config.json.readUint(string.concat("$.", key));
     }
@@ -48,4 +49,7 @@ library ConfigLib {
         return config.json.readUint(FORK_BLOCK_NUMBER_PATH);
     }
 
+    function getOwners(Config storage config) internal returns (address[] memory) {
+        return config.json.readAddressArray(OWNERS_PATH);
+    }
 }

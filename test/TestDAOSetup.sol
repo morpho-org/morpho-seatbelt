@@ -66,4 +66,41 @@ contract TestDAOSetup is TestSetup {
         assertEq(Ownable(address(scopeGuard)).owner(), address(morphoAdmin));
         assertEq(abi.decode(morphoAdmin.getStorageAt(GUARD_STORAGE_SLOT, 1), (address)), scopeGuard);
     }
+
+    function testThresholdSafe() public {
+        assertEq(operator.getThreshold(), 3, "Wrong Threshold for Operator");
+        assertEq(morphoDao.getThreshold(), 5, "Wrong Threshold for DAO");
+    }
+
+    function testRightOwnerMorphoDAO() public {
+        address[] memory ownersDao = morphoDao.getOwners();
+        assertEq(owners.length, ownersDao.length, "Wrong number of owner for DAO");
+        bool success;
+        for (uint256 i; i < ownersDao.length; i++) {
+            success = false;
+            for (uint256 j; j < owners.length; j++) {
+                if (ownersDao[i] == owners[j]) {
+                    success = true;
+                    break;
+                }
+            }
+            assertTrue(success, "Owner not expected");
+        }
+    }
+
+    function testRightOwnerMorphoOperator() public {
+        address[] memory ownersOperator = operator.getOwners();
+        assertEq(owners.length, ownersOperator.length, "Wrong number of owner for DAO");
+        bool success;
+        for (uint256 i; i < ownersOperator.length; i++) {
+            success = false;
+            for (uint256 j; j < owners.length; j++) {
+                if (ownersOperator[i] == owners[j]) {
+                    success = true;
+                    break;
+                }
+            }
+            assertTrue(success, "Owner not expected");
+        }
+    }
 }

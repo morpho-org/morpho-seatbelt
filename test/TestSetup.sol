@@ -91,7 +91,6 @@ contract TestSetup is Test, Configured {
         _populateMcFunctionSelectors();
         _populateMa2FunctionSelectors();
         _populateMa3FunctionSelectors();
-        _executeTestTransaction(_txName());
     }
 
     function _loadConfig() internal virtual override {

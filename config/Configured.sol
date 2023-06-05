@@ -65,6 +65,20 @@ contract Configured is StdChains {
         );
     }
 
+    function _unwrapTxData(bytes memory data) internal view returns (Transaction memory transaction) {
+        return this.unwrapTxData(data);
+    }
+
+    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
+        transaction = abi.decode(data[4:], (Transaction));
+    }
+
+    function _getSelector(bytes memory data) internal pure returns (bytes4 selector) {
+        assembly {
+            selector := mload(add(data, 32))
+        }
+    }
+
     function _getTxData(string memory txName) internal returns (Transaction memory transaction) {
         string memory root = vm.projectRoot();
         string memory path = string.concat(root, "/config/transactions/", txName, ".json");

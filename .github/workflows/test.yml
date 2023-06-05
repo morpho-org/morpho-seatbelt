@@ -32,3 +32,5 @@ jobs:
         run: |
           forge test -vvv
         id: test
+        env:
+          RPC_MAINNET: wss://eth-mainnet.g.alchemy.com/v2/${{ secrets.ALCHEMY_KEY }}

@@ -78,18 +78,4 @@ contract Configured is StdChains {
         else if (operation == 1) transaction.operation = Operation.DelegateCall;
         else revert InvalidOperation();
     }
-
-    function _getTxData(string memory txName) internal returns (Transaction memory transaction) {
-        string memory root = vm.projectRoot();
-        string memory path = string.concat(root, "/config/transactions/", txName, ".json");
-        txConfig.json = vm.readFile(path);
-        transaction.to = txConfig.getAddress("to");
-        transaction.value = txConfig.getUint("value");
-        transaction.data = txConfig.getBytes("data");
-
-        uint256 operation = txConfig.getUint("operation");
-        if (operation == 0) transaction.operation = Operation.Call;
-        else if (operation == 1) transaction.operation = Operation.DelegateCall;
-        else revert InvalidOperation();
-    }
 }

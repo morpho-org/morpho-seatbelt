@@ -71,8 +71,8 @@ contract Configured is StdChains {
         return this.unwrapTxData(data);
     }
 
-    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory) {
-        return abi.decode(data[4:], (Transaction));
+    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
+        (transaction.to, transaction.value, transaction.data, transaction.operation) = abi.decode(data[4:], (address, uint256, bytes, Operation));
     }
 
     function _getSelector(bytes memory data) internal pure returns (bytes4 selector) {

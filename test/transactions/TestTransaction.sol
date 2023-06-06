@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import "test/TestSetup.sol";
 
 contract TestTransaction is TestSetup {
-    /// @dev Operation is bool because foundry does not fuzz the enum correctly
+    /// @dev Operation is bool because foundry does not fuzz the enum correctly.
     function testUnwrapTx(address to, uint256 value, bool operation) public virtual {
         Transaction memory transaction = Transaction({
             to: to,

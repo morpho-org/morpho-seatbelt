@@ -4,26 +4,15 @@ pragma solidity ^0.8.13;
 import "test/TestSetup.sol";
 
 contract TestTransaction is TestSetup {
-    using RoleHelperLib for IRoles;
-    using ConfigLib for Config;
+    /// @dev Operation is bool because foundry does not fuzz the enum correctly
+    function testUnwrapTx(address to, uint256 value, bool operation) public virtual {
+        Transaction memory transaction = Transaction({
+            to: to,
+            value: value,
+            data: hex"1234",
+            operation: operation ? Operation.DelegateCall : Operation.Call
+        });
 
-    function setUp() public virtual override {
-        super.setUp();
-    }
-
-    function testUnwrapTx1() public virtual {
-        Transaction memory transaction =
-            Transaction({to: address(0), value: 1000, data: hex"1234", operation: Operation.Call});
-        _testUnwrapTx(transaction);
-    }
-
-    function testUnwrapTx2() public virtual {
-        Transaction memory transaction =
-            Transaction({to: address(1), value: 1000, data: hex"1234", operation: Operation.Call});
-        _testUnwrapTx(transaction);
-    }
-
-    function _testUnwrapTx(Transaction memory transaction) public {
         bytes memory wrappedTx = _wrapTxData(transaction);
 
         bytes4 selector = _getSelector(wrappedTx);

@@ -7,8 +7,11 @@ out/
 /broadcast/*/31337/
 /broadcast/**/dry-run/
 
-#Node Modules
+# Node Modules
 node_modules/
+
+# Logs
+yarn-error.log
 
 # Docs
 docs/

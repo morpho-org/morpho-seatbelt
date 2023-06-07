@@ -140,19 +140,31 @@ contract TestSetup is Test, Configured {
 
         vm.warp(block.timestamp + delayModifier.txCooldown());
         uint256 txNonce = delayModifier.txNonce();
-        while (
-            delayModifier.txHash(txNonce)
-                != delayModifier.getTransactionHash(
-                    transaction.to, transaction.value, transaction.data, transaction.operation
-                )
-        ) {
+
+        Transaction memory unwrappedTransaction = this.unwrapTxData(transaction.data);
+        bytes32 txHash = delayModifier.getTransactionHash(
+            unwrappedTransaction.to,
+            unwrappedTransaction.value,
+            unwrappedTransaction.data,
+            unwrappedTransaction.operation
+        );
+
+        bool success;
+        while (delayModifier.txHash(txNonce) != txHash) {
             ++txNonce;
+            success = true;
         }
-        vm.prank(address(morphoAdmin));
-        delayModifier.setTxNonce(txNonce);
-        (address to, uint256 value, bytes memory data, Operation operation) =
-            abi.decode(transaction.data, (address, uint256, bytes, Operation));
-        delayModifier.executeNextTx(to, value, data, operation);
+        if (success) {
+            vm.prank(address(morphoAdmin));
+            delayModifier.setTxNonce(txNonce);
+        }
+
+        delayModifier.executeNextTx(
+            unwrappedTransaction.to,
+            unwrappedTransaction.value,
+            unwrappedTransaction.data,
+            unwrappedTransaction.operation
+        );
     }
 
     function _populateMembersToCheck() internal {

@@ -60,7 +60,6 @@ contract TestSetup is Test, Configured {
     bytes4[] internal ma2SelectorsAdmin;
     bytes4[] internal ma3SelectorsAdmin;
 
-
     mapping(bytes4 => string) mcSelectorFunctionMap;
     mapping(bytes4 => string) ma2SelectorFunctionMap;
     mapping(bytes4 => string) ma3SelectorFunctionMap;

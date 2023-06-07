@@ -17,7 +17,7 @@ contract TestTransaction is TestSetup {
 
     function _execute(string memory txName) internal virtual {
         Transaction memory transaction = _getTxData(txName);
-        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.op);
+        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.operation);
     }
 
     function testAssertions() public virtual {

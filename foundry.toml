@@ -4,4 +4,7 @@ out = "out"
 libs = ["lib"]
 fs_permissions = [{ access = "read", path = "./config/"}]
 
+[rpc_endpoints]
+mainnet = "${RPC_MAINNET}"
+
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

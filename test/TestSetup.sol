@@ -140,7 +140,7 @@ contract TestSetup is Test, Configured {
         vm.warp(block.timestamp + delayModifier.txCooldown());
         uint256 txNonce = delayModifier.txNonce();
 
-        Transaction memory unwrappedTransaction = this.unwrapTxData(transaction.data);
+        Transaction memory unwrappedTransaction = _unwrapTxData(transaction.data);
         bytes32 txHash = delayModifier.getTransactionHash(
             unwrappedTransaction.to,
             unwrappedTransaction.value,

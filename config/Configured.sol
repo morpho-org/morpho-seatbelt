@@ -22,11 +22,6 @@ contract Configured is StdChains {
     Config internal networkConfig;
     Config internal txConfig;
 
-    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
-        (transaction.to, transaction.value, transaction.data, transaction.operation) =
-            abi.decode(data[4:], (address, uint256, bytes, Operation));
-    }
-
     function _network() internal view virtual returns (string memory) {
         try vm.envString("NETWORK") returns (string memory network) {
             return network;
@@ -68,6 +63,22 @@ contract Configured is StdChains {
             transaction.data,
             transaction.operation
         );
+    }
+
+    /// @dev Slicing bytes array data is only possible with bytes in calldata, but internal functions cannot create calldata.
+    ///      So we work around this by doing an external call on this contract to force the data to be in calldata.
+    function _unwrapTxData(bytes memory data) internal view returns (Transaction memory) {
+        return this.unwrapTxData(data);
+    }
+
+    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
+        (transaction.to, transaction.value, transaction.data, transaction.operation) = abi.decode(data[4:], (address, uint256, bytes, Operation));
+    }
+
+    function _getSelector(bytes memory data) internal pure returns (bytes4 selector) {
+        assembly {
+            selector := mload(add(data, 32))
+        }
     }
 
     function _getTxData(string memory txName) internal returns (Transaction memory transaction) {

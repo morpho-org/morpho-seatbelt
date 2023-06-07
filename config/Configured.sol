@@ -22,11 +22,6 @@ contract Configured is StdChains {
     Config internal networkConfig;
     Config internal txConfig;
 
-    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
-        (transaction.to, transaction.value, transaction.data, transaction.operation) =
-            abi.decode(data[4:], (address, uint256, bytes, Operation));
-    }
-
     function _network() internal view virtual returns (string memory) {
         try vm.envString("NETWORK") returns (string memory network) {
             return network;

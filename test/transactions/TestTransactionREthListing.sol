@@ -1,18 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "test/TestSetup.sol";
+import "test/TestTransactionSetUp.sol";
 
-contract TestTransactionREthListing is TestSetup {
+contract TestTransactionREthListing is TestTransactionSetUp {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
 
     address internal constant RETH = 0xae78736Cd615f374D3085123A210448E74Fc6393;
-
-    function setUp() public virtual override {
-        super.setUp();
-        _executeTestTransaction(_txName());
-    }
 
     function testAssertionsOfTransaction() public virtual {
         IMorphoAaveV3.Market memory market = morphoAaveV3.market(RETH);

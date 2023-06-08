@@ -2,9 +2,9 @@
 pragma solidity >=0.8.0;
 
 import "src/interfaces/IModule.sol";
-import "test/TestSetup.sol";
+import "test/TestTransactionSetUp.sol";
 
-contract TestDAOSetup is TestSetup {
+contract TestDAOSetup is TestTransactionSetUp {
     // keccak256("guard_manager.guard.address") = 0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8
     uint256 public constant GUARD_STORAGE_SLOT =
         uint256(0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8);

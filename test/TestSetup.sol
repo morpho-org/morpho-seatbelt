@@ -24,7 +24,7 @@ import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/Pr
 
 /// @notice The DAO can call all the governance functions including the ones that can be used by Morpho Operator.
 /// @notice It just needs to be executed through the Delay Modifier.
-contract TestSetUp is Test, Configured {
+contract TestSetup is Test, Configured {
     using ConfigLib for Config;
     using RoleHelperLib for IRoles;
 

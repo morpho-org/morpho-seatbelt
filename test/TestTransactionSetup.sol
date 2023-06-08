@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "test/TestSetUp.sol";
+import "test/TestSetup.sol";
 
 /// @notice The DAO can call all the governance functions including the ones that can be used by Morpho Operator.
 /// @notice It just needs to be executed through the Delay Modifier.
-contract TestTransactionSetUp is TestSetUp {
+contract TestTransactionSetup is TestSetup {
     function setUp() public virtual override {
         super.setUp();
         _executeTestTransaction(_txName());

@@ -38,6 +38,14 @@ contract Configured is StdChains {
         }
     }
 
+    function _txNameRawData() internal view virtual returns (string memory) {
+        try vm.envString("TX_NAME_RAW_DATA") returns (string memory transactionName) {
+            return transactionName;
+        } catch {
+            return "testRawData";
+        }
+    }
+
     function _initConfig() internal returns (Config storage) {
         if (bytes(networkConfig.json).length == 0) {
             string memory root = vm.projectRoot();
@@ -72,7 +80,8 @@ contract Configured is StdChains {
     }
 
     function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
-        (transaction.to, transaction.value, transaction.data, transaction.operation) = abi.decode(data[4:], (address, uint256, bytes, Operation));
+        (transaction.to, transaction.value, transaction.data, transaction.operation) =
+            abi.decode(data[4:], (address, uint256, bytes, Operation));
     }
 
     function _getSelector(bytes memory data) internal pure returns (bytes4 selector) {

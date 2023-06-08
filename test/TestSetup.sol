@@ -139,7 +139,7 @@ contract TestSetup is Test, Configured {
 
         vm.warp(block.timestamp + delayModifier.txCooldown());
         uint256 txNonce = delayModifier.txNonce();
-
+        uint256 currentTxNonce = txNonce;
         Transaction memory unwrappedTransaction = _unwrapTxData(transaction.data);
         bytes32 txHash = delayModifier.getTransactionHash(
             unwrappedTransaction.to,
@@ -148,12 +148,11 @@ contract TestSetup is Test, Configured {
             unwrappedTransaction.operation
         );
 
-        bool success;
         while (delayModifier.txHash(txNonce) != txHash) {
             ++txNonce;
-            success = true;
         }
-        if (success) {
+
+        if (currentTxNonce != txNonce) {
             vm.prank(address(morphoAdmin));
             delayModifier.setTxNonce(txNonce);
         }

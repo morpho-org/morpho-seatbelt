@@ -38,11 +38,11 @@ contract Configured is StdChains {
         }
     }
 
-    function _txNameRawData() internal view virtual returns (string memory) {
+    function _txNameTransactionData() internal view virtual returns (string memory) {
         try vm.envString("TX_NAME_RAW_DATA") returns (string memory transactionName) {
             return transactionName;
         } catch {
-            return "testRawData";
+            return "testTransactionData";
         }
     }
 

@@ -30,7 +30,7 @@ contract TestTransactionREthListing is TestSetup {
     }
 
     function testAssertionsOfTransactionRawData() public virtual {
-        _executeTestTransactionRawData(_txNameRawData());
+        _executeTestTransactionData(_txNameTransactionData());
         IMorphoAaveV3.Market memory market = morphoAaveV3.market(RETH);
 
         assertEq(market.underlying, RETH, "Wrong address");

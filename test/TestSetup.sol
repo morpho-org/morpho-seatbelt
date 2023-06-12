@@ -155,7 +155,7 @@ contract TestSetup is Test, Configured {
         delayModifier.executeNextTx(transaction.to, transaction.value, transaction.data, transaction.operation);
     }
 
-    function _executeTestTransactionRawData(string memory filename) internal {
+    function _executeTestTransactionData(string memory filename) internal {
         // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
         _addModule(IAvatar(morphoDao), address(this));
 

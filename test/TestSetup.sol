@@ -124,10 +124,6 @@ contract TestSetup is Test, Configured {
         rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");
     }
 
-    function _forkBlockNumber() internal virtual returns (uint256) {
-        return networkConfig.getForkBlockNumber();
-    }
-
     function _addModule(IAvatar avatar, address module) internal {
         vm.prank(address(avatar));
         avatar.enableModule(module);

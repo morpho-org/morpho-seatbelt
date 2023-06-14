@@ -18,14 +18,26 @@ Morpho Seatbelt provides a framework for testing governance transactions to upda
 
 ### Getting Started
 
-- Install [Foundry](https://github.com/foundry-rs/foundry).
+- Install [Foundry](https://github.com/foundry-rs/foundry) or Run `foundryup` to initialize Foundry.
+- Run `forge install` to initialize the repository by installing the required dependencies.
 - If not testing on mainnet, add a config file in the [network config](./config/networks) using the mainnet config as a template, and create a `.env` file with a NETWORK field.
-- If testing a safe transaction on the Morpho DAO, add the transaction information in the [transactions config](./config/transactions). You can use [this](./test/TestLog.sol) as a template. 
+- If testing a safe transaction on the Morpho DAO, add the transaction information in the [transactions config](./config/transactions). You can use [this](./test/TestLog.sol) as a template. You can test two types of transactions with the Morpho DAO. 
 
+The Raw Data transaction concerns the one's that you can execute directly with a simple script. The name of the json file has to be added in the `.env` in place of testRawData.
+
+
+The other type of transaction that can be tested is the transaction that executed the function `executeTransactionFromModule` from the Morpho DAO. The arguments of the function `executeTransactionFromModule` need to be added to the json file. The name of the json file has to be added in the `.env` in place of testRawData.
+
+
+You can now test the SetUp of the Morpho DAO with the following command: 
+
+```bash
+forge test
+```
 
 ## Questions & Feedback
 
-For any question or feedback you can join the Morpho [discord](https://discord.morpho.xyz).
+For any questions or feedbacks, you can join the Morpho [discord](https://discord.morpho.xyz).
 
 ---
 

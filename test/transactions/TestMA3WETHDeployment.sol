@@ -5,7 +5,7 @@ import "test/TestSetup.sol";
 import {IMorphoAaveV3SupplyVault} from "src/interfaces/IMorphoAaveV3SupplyVault.sol";
 import {Ownable2Step} from "@openzeppelin-contracts/contracts/access/Ownable2Step.sol";
 
-contract TestMorphoAaveV3VaultDeploy is TestSetup {
+contract TestMA3WETHDeployment is TestSetup {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
 
@@ -17,7 +17,11 @@ contract TestMorphoAaveV3VaultDeploy is TestSetup {
     function setUp() public virtual override {
         super.setUp();
         _addModule(IAvatar(morphoAssociation), address(this));
-        _execute("testVaultDeploy");
+        _execute("ma3WETHDeployment");
+    }
+
+    function _forkBlockNumber() internal virtual override returns (uint256) {
+        return 17478410;
     }
 
     function _execute(string memory txName) internal virtual {

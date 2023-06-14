@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "test/TestSetup.sol";
+import "test/TestTransactionSetup.sol";
 
 contract TestTransaction is TestTransactionSetup {
     /// @dev Operation is bool because foundry does not fuzz the enum correctly.

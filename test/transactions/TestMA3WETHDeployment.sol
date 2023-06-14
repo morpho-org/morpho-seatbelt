@@ -20,6 +20,10 @@ contract TestMA3WETHDeployment is TestSetup {
         _execute("ma3WETHDeployment");
     }
 
+    function _network() internal view virtual override returns (string memory) {
+        return "ethereum-mainnet";
+    }
+
     function _forkBlockNumber() internal virtual override returns (uint256) {
         return 17478410;
     }

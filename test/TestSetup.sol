@@ -91,6 +91,9 @@ contract TestSetup is Test, Configured {
         _populateMcFunctionSelectors();
         _populateMa2FunctionSelectors();
         _populateMa3FunctionSelectors();
+        // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
+        _addModule(IAvatar(morphoDao), address(this));
+        _addModule(IAvatar(operator), address(this));
     }
 
     function _loadConfig() internal virtual override {

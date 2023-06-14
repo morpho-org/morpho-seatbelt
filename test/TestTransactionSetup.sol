@@ -6,9 +6,10 @@ import "test/TestSetup.sol";
 /// @notice The DAO can call all the governance functions including the ones that can be used by Morpho Operator.
 /// @notice It just needs to be executed through the Delay Modifier.
 contract TestTransactionSetup is TestSetup {
+    /// @dev Should uncomment line and add the correct json file if we want to test a transaction on the whole testing suite.
     function setUp() public virtual override {
         super.setUp();
-        _executeTestTransaction(_txName());
+        /// _executeTestTransaction(_txName());
     }
 
     function _addModule(IAvatar avatar, address module) internal {

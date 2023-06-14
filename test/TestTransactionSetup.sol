@@ -10,6 +10,7 @@ contract TestTransactionSetup is TestSetup {
     function setUp() public virtual override {
         super.setUp();
         /// _executeTestTransaction(_txName());
+        /// _executeTestTransactionData(_txNameTransactionData());
     }
 
     function _addModule(IAvatar avatar, address module) internal {
@@ -21,6 +22,42 @@ contract TestTransactionSetup is TestSetup {
         // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
         _addModule(IAvatar(morphoDao), address(this));
         _addModule(IAvatar(operator), address(this));
+
+        Transaction memory transaction = _getTxData(filename);
+
+        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.operation);
+
+        vm.warp(block.timestamp + delayModifier.txCooldown());
+        uint256 txNonce = delayModifier.txNonce();
+        uint256 currentTxNonce = txNonce;
+        Transaction memory unwrappedTransaction = _unwrapTxData(transaction.data);
+        bytes32 txHash = delayModifier.getTransactionHash(
+            unwrappedTransaction.to,
+            unwrappedTransaction.value,
+            unwrappedTransaction.data,
+            unwrappedTransaction.operation
+        );
+
+        while (delayModifier.txHash(txNonce) != txHash) {
+            ++txNonce;
+        }
+
+        if (currentTxNonce != txNonce) {
+            vm.prank(address(morphoAdmin));
+            delayModifier.setTxNonce(txNonce);
+        }
+
+        delayModifier.executeNextTx(
+            unwrappedTransaction.to,
+            unwrappedTransaction.value,
+            unwrappedTransaction.data,
+            unwrappedTransaction.operation
+        );
+    }
+
+    function _executeTestTransactionData(string memory filename) internal {
+        // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
+        _addModule(IAvatar(morphoDao), address(this));
 
         Transaction memory transaction = _getTxData(filename);
 

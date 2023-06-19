@@ -8,6 +8,11 @@ contract TestTransactionTransferOwnershipVault is TestTransactionSetup {
 
     function setUp() public virtual override {
         super.setUp();
+        _executeTestTransaction("testTransferOwnershipVault");
+    }
+
+    function _forkBlockNumber() internal virtual override returns (uint256) {
+        return 17514636;
     }
 
     function testAssertionsOfTransaction() public virtual {

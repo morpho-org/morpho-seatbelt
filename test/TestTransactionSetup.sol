@@ -9,7 +9,7 @@ contract TestTransactionSetup is TestSetup {
     /// @dev Should uncomment line and add the correct json file if we want to test a transaction on the whole testing suite.
     function setUp() public virtual override {
         super.setUp();
-        _executeTestTransaction("testTransferOwnershipVault");
+        //_executeTestTransaction(_txName());
         /// _executeTestTransactionData(_txNameTransactionData());
     }
 

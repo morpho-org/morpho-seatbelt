@@ -30,6 +30,10 @@ contract Configured is StdChains {
         }
     }
 
+    function _forkBlockNumber() internal virtual returns (uint256) {
+        return networkConfig.getForkBlockNumber();
+    }
+
     function _txName() internal view virtual returns (string memory) {
         try vm.envString("TX_NAME") returns (string memory transactionName) {
             return transactionName;

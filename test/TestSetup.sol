@@ -21,6 +21,8 @@ import {Operation} from "src/libraries/Types.sol";
 import {MorphoToken, Token} from "@morpho-token/src/MorphoToken.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
 import {ProxyAdmin} from "@openzeppelin-contracts/contracts/proxy/transparent/ProxyAdmin.sol";
+import {ITransparentUpgradeableProxy} from
+    "@openzeppelin-contracts/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 /// @notice The DAO can call all the governance functions including the ones that can be used by Morpho Operator.
 /// @notice It just needs to be executed through the Delay Modifier.
@@ -120,7 +122,7 @@ contract TestSetup is Test, Configured {
     }
 
     function _getForkBlockNumber() internal virtual {
-        uint256 forkBlockNumber = networkConfig.getForkBlockNumber();
+        uint256 forkBlockNumber = _forkBlockNumber();
         if (forkBlockNumber == 0) {
             forkId = vm.createSelectFork(chain.rpcUrl);
         } else {

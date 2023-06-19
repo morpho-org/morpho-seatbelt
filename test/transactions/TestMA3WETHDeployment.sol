@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "test/TestSetup.sol";
+import "test/TestTransactionSetup.sol";
 import {IMorphoAaveV3SupplyVault} from "src/interfaces/IMorphoAaveV3SupplyVault.sol";
 import {Ownable2Step} from "@openzeppelin-contracts/contracts/access/Ownable2Step.sol";
 import {IERC20} from "@openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
-contract TestMA3WETHDeployment is TestSetup {
+contract TestMA3WETHDeployment is TestTransactionSetup {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
 
@@ -48,9 +48,11 @@ contract TestMA3WETHDeployment is TestSetup {
         assertEq(vault.decimals(), 18);
         assertEq(WETH.allowance(address(vault), address(morphoAaveV3)), type(uint256).max);
 
+        console.log("begin");
         assertApproxEqAbs(vault.totalAssets(), 1e9, 2);
-
+        console.log("done");
         assertApproxEqAbs(vault.balanceOf(address(0xdead)), 1e9, 2);
+        console.log("finish");
         assertEq(vault.balanceOf(address(0xdead)), vault.totalSupply());
 
         vm.startPrank(address(proxyAdmin));

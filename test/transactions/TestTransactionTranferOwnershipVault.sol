@@ -4,9 +4,6 @@ pragma solidity >=0.8.0;
 import "test/TestTransactionSetup.sol";
 
 contract TestTransactionTransferOwnershipVault is TestTransactionSetup {
-    using RoleHelperLib for IRoles;
-    using ConfigLib for Config;
-
     address internal constant ma3WETH = 0x39Dd7790e75C6F663731f7E1FdC0f35007D3879b;
 
     function setUp() public virtual override {

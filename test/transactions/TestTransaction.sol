@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "test/TestSetup.sol";
+import "test/TestTransactionSetup.sol";
 
-contract TestTransaction is TestSetup {
+contract TestTransaction is TestTransactionSetup {
     /// @dev Operation is bool because foundry does not fuzz the enum correctly.
     function testUnwrapTx(address to, uint256 value, bool operation) public virtual {
         Transaction memory transaction = Transaction({
@@ -28,4 +28,6 @@ contract TestTransaction is TestSetup {
             "Operation mismatch"
         );
     }
+
+    function testAssertionsOfTransaction() public virtual {}
 }

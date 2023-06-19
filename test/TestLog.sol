@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "test/TestSetup.sol";
+import "test/TestTransactionSetup.sol";
 
-contract TestLog is TestSetup {
+contract TestLog is TestTransactionSetup {
     using RoleHelperLib for IRoles;
     using ConfigLib for Config;
 

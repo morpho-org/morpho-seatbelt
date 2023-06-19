@@ -16,6 +16,22 @@ contract TestDAOSetup is TestTransactionSetup {
         assertEq(Ownable(address(proxyAdmin)).owner(), address(morphoAdmin));
     }
 
+    function testMorphoAdminAsOwnerOfVaults() public {
+        assertEq(Ownable(address(maWBTC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maUSDC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maUSDT)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maCRV)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maWETH)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maDAI)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcWTBC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcUSDT)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcUSDC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcUNI)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcCOMP)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcWETH)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcDAI)).owner(), address(morphoAdmin));
+    }
+
     function testRoleModifier() public {
         assertEq(Ownable(address(roleModifier)).owner(), address(morphoAdmin));
         assertEq(IModule(address(roleModifier)).target(), address(morphoAdmin));

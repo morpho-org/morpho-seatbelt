@@ -95,12 +95,8 @@ contract TestSetup is Test, Configured {
 
     function _loadConfig() internal virtual override {
         super._loadConfig();
-        uint256 forkBlockNumber = networkConfig.getForkBlockNumber();
-        if (forkBlockNumber == 0) {
-            forkId = vm.createSelectFork(chain.rpcUrl);
-        } else {
-            forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
-        }
+
+        _getForkBlockNumber();
 
         _loadVaults();
 
@@ -121,6 +117,15 @@ contract TestSetup is Test, Configured {
         morphoAaveV3 = IMorphoAaveV3(networkConfig.getAddress("morphoAaveV3"));
         rewardsDistributorCore = networkConfig.getAddress("rewardsDistributorCore");
         rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");
+    }
+
+    function _getForkBlockNumber() internal virtual {
+        uint256 forkBlockNumber = networkConfig.getForkBlockNumber();
+        if (forkBlockNumber == 0) {
+            forkId = vm.createSelectFork(chain.rpcUrl);
+        } else {
+            forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
+        }
     }
 
     function _populateMembersToCheck() internal {

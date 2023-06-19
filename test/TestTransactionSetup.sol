@@ -25,18 +25,14 @@ contract TestTransactionSetup is TestSetup {
 
         Transaction memory transaction = _getTxData(filename);
 
-        morphoDao.execTransactionFromModule(transaction.to, transaction.value, transaction.data, transaction.operation);
+        morphoDao.execTransactionFromModule(address(delayModifier), 0, _wrapTxData(transaction), Operation.Call);
 
         vm.warp(block.timestamp + delayModifier.txCooldown());
         uint256 txNonce = delayModifier.txNonce();
         uint256 currentTxNonce = txNonce;
-        Transaction memory unwrappedTransaction = _unwrapTxData(transaction.data);
-        bytes32 txHash = delayModifier.getTransactionHash(
-            unwrappedTransaction.to,
-            unwrappedTransaction.value,
-            unwrappedTransaction.data,
-            unwrappedTransaction.operation
-        );
+
+        bytes32 txHash =
+            delayModifier.getTransactionHash(transaction.to, transaction.value, transaction.data, transaction.operation);
 
         while (delayModifier.txHash(txNonce) != txHash) {
             ++txNonce;
@@ -47,12 +43,7 @@ contract TestTransactionSetup is TestSetup {
             delayModifier.setTxNonce(txNonce);
         }
 
-        delayModifier.executeNextTx(
-            unwrappedTransaction.to,
-            unwrappedTransaction.value,
-            unwrappedTransaction.data,
-            unwrappedTransaction.operation
-        );
+        delayModifier.executeNextTx(transaction.to, transaction.value, transaction.data, transaction.operation);
     }
 
     function _executeTestTransactionData(string memory filename) internal {

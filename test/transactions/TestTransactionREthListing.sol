@@ -4,13 +4,11 @@ pragma solidity >=0.8.0;
 import "test/TestTransactionSetup.sol";
 
 contract TestTransactionREthListing is TestTransactionSetup {
-    using RoleHelperLib for IRoles;
-    using ConfigLib for Config;
-
     address internal constant RETH = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
     function setUp() public virtual override {
         super.setUp();
+        _executeTestTransaction("testREth");
     }
 
     function _forkBlockNumber() internal virtual override returns (uint256) {

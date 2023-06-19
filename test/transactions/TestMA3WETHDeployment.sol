@@ -48,11 +48,8 @@ contract TestMA3WETHDeployment is TestTransactionSetup {
         assertEq(vault.decimals(), 18);
         assertEq(WETH.allowance(address(vault), address(morphoAaveV3)), type(uint256).max);
 
-        console.log("begin");
         assertApproxEqAbs(vault.totalAssets(), 1e9, 2);
-        console.log("done");
         assertApproxEqAbs(vault.balanceOf(address(0xdead)), 1e9, 2);
-        console.log("finish");
         assertEq(vault.balanceOf(address(0xdead)), vault.totalSupply());
 
         vm.startPrank(address(proxyAdmin));

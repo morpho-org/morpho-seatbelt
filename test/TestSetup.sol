@@ -122,7 +122,7 @@ contract TestSetup is Test, Configured {
     }
 
     function _getForkBlockNumber() internal virtual {
-        uint256 forkBlockNumber = networkConfig.getForkBlockNumber();
+        uint256 forkBlockNumber = _forkBlockNumber();
         if (forkBlockNumber == 0) {
             forkId = vm.createSelectFork(chain.rpcUrl);
         } else {

@@ -15,7 +15,7 @@ contract Configured is StdChains {
     using ConfigLib for Config;
 
     error InvalidOperation();
-    
+
     VmSafe private constant vm = VmSafe(address(uint160(uint256(keccak256("hevm cheat code")))));
 
     Chain internal chain;
@@ -33,12 +33,20 @@ contract Configured is StdChains {
     function _forkBlockNumber() internal virtual returns (uint256) {
         return networkConfig.getForkBlockNumber();
     }
-    
+
     function _txName() internal view virtual returns (string memory) {
         try vm.envString("TX_NAME") returns (string memory transactionName) {
             return transactionName;
         } catch {
             return "test";
+        }
+    }
+
+    function _txNameTransactionData() internal view virtual returns (string memory) {
+        try vm.envString("TX_NAME_RAW_DATA") returns (string memory transactionName) {
+            return transactionName;
+        } catch {
+            return "testTransactionData";
         }
     }
 
@@ -56,7 +64,34 @@ contract Configured is StdChains {
     function _loadConfig() internal virtual {
         string memory rpcAlias = networkConfig.getRpcAlias();
 
-        chain = getChain(rpcAlias);        
+        chain = getChain(rpcAlias);
+    }
+
+    function _wrapTxData(Transaction memory transaction) internal pure returns (bytes memory) {
+        return abi.encodeWithSelector(
+            IAvatar.execTransactionFromModule.selector,
+            transaction.to,
+            transaction.value,
+            transaction.data,
+            transaction.operation
+        );
+    }
+
+    /// @dev Slicing bytes array data is only possible with bytes in calldata, but internal functions cannot create calldata.
+    ///      So we work around this by doing an external call on this contract to force the data to be in calldata.
+    function _unwrapTxData(bytes memory data) internal view returns (Transaction memory) {
+        return this.unwrapTxData(data);
+    }
+
+    function unwrapTxData(bytes calldata data) external pure returns (Transaction memory transaction) {
+        (transaction.to, transaction.value, transaction.data, transaction.operation) =
+            abi.decode(data[4:], (address, uint256, bytes, Operation));
+    }
+
+    function _getSelector(bytes memory data) internal pure returns (bytes4 selector) {
+        assembly {
+            selector := mload(add(data, 32))
+        }
     }
 
     function _getTxData(string memory txName) internal returns (Transaction memory transaction) {

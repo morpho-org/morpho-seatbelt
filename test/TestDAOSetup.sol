@@ -2,9 +2,9 @@
 pragma solidity >=0.8.0;
 
 import "src/interfaces/IModule.sol";
-import "test/TestSetup.sol";
+import "test/TestTransactionSetup.sol";
 
-contract TestDAOSetup is TestSetup {
+contract TestDAOSetup is TestTransactionSetup {
     // keccak256("guard_manager.guard.address") = 0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8
     uint256 public constant GUARD_STORAGE_SLOT =
         uint256(0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8);
@@ -14,6 +14,22 @@ contract TestDAOSetup is TestSetup {
         assertEq(Ownable(address(morphoAaveV2)).owner(), address(morphoAdmin));
         assertEq(Ownable(address(morphoAaveV3)).owner(), address(morphoAdmin));
         assertEq(Ownable(address(proxyAdmin)).owner(), address(morphoAdmin));
+    }
+
+    function testMorphoAdminAsOwnerOfVaults() public {
+        assertEq(Ownable(address(maWBTC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maUSDC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maUSDT)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maCRV)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maWETH)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(maDAI)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcWTBC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcUSDT)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcUSDC)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcUNI)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcCOMP)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcWETH)).owner(), address(morphoAdmin));
+        assertEq(Ownable(address(mcDAI)).owner(), address(morphoAdmin));
     }
 
     function testRoleModifier() public {

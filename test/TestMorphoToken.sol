@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import "test/TestSetup.sol";
+import "test/TestTransactionSetup.sol";
 
-contract TestMorphoToken is TestSetup {
+contract TestMorphoToken is TestTransactionSetup {
     // Sense whitelisted addresses https://forum.morpho.xyz/t/whitelisted-morpho-transfers-for-sense-integration/151
     address public constant SENSE_REWARDS_DISTRIBUTOR = 0x6bce2D632fc8a327e6Ea353b028999bfCbCb6fcD;
     address public constant MA_DAI_SENSE_ADAPTER = 0x9887e67AaB4388eA4cf173B010dF5c92B91f55B5;

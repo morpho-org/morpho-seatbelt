@@ -9,13 +9,14 @@ import {console2} from "@forge-std/console2.sol";
 import {Role, TargetAddress, Transaction, Operation} from "src/libraries/Types.sol";
 import {RoleHelperLib} from "test/RoleHelperLib.sol";
 
-import {IMorphoCompoundGovernance} from "src/interfaces/IMorphoCompoundGovernance.sol";
-import {IMorphoAaveV2Governance} from "src/interfaces/IMorphoAaveV2Governance.sol";
-import {IMorphoAaveV3Governance} from "src/interfaces/IMorphoAaveV3Governance.sol";
+import {IMorphoCompound} from "src/interfaces/IMorphoCompound.sol";
+import {IMorphoAaveV2} from "src/interfaces/IMorphoAaveV2.sol";
+import {IMorphoAaveV3} from "src/interfaces/IMorphoAaveV3.sol";
 import {IAvatar} from "src/interfaces/IAvatar.sol";
 import {ISafe} from "src/interfaces/ISafe.sol";
 import {IDelay} from "src/interfaces/IDelay.sol";
 import {IRoles} from "src/interfaces/IRoles.sol";
+import {Operation} from "src/libraries/Types.sol";
 
 import {MorphoToken, Token} from "@morpho-token/src/MorphoToken.sol";
 import {Ownable} from "@openzeppelin-contracts/contracts/access/Ownable.sol";
@@ -41,9 +42,9 @@ contract TestSetup is Test, Configured {
     address public scopeGuard;
 
     ProxyAdmin public proxyAdmin;
-    IMorphoCompoundGovernance public morphoCompound;
-    IMorphoAaveV2Governance public morphoAaveV2;
-    IMorphoAaveV3Governance public morphoAaveV3;
+    IMorphoCompound public morphoCompound;
+    IMorphoAaveV2 public morphoAaveV2;
+    IMorphoAaveV3 public morphoAaveV3;
     MorphoToken public morphoToken;
 
     address[] internal owners;
@@ -96,12 +97,8 @@ contract TestSetup is Test, Configured {
 
     function _loadConfig() internal virtual override {
         super._loadConfig();
-        uint256 forkBlockNumber = _forkBlockNumber();
-        if (forkBlockNumber == 0) {
-            forkId = vm.createSelectFork(chain.rpcUrl);
-        } else {
-            forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
-        }
+
+        _getForkBlockNumber();
 
         _loadVaults();
 
@@ -117,16 +114,20 @@ contract TestSetup is Test, Configured {
         roleModifier = IRoles(networkConfig.getAddress("roleModifier"));
         scopeGuard = networkConfig.getAddress("scopeGuard");
         proxyAdmin = ProxyAdmin(networkConfig.getAddress("proxyAdmin"));
-        morphoCompound = IMorphoCompoundGovernance(networkConfig.getAddress("morphoCompound"));
-        morphoAaveV2 = IMorphoAaveV2Governance(networkConfig.getAddress("morphoAaveV2"));
-        morphoAaveV3 = IMorphoAaveV3Governance(networkConfig.getAddress("morphoAaveV3"));
+        morphoCompound = IMorphoCompound(networkConfig.getAddress("morphoCompound"));
+        morphoAaveV2 = IMorphoAaveV2(networkConfig.getAddress("morphoAaveV2"));
+        morphoAaveV3 = IMorphoAaveV3(networkConfig.getAddress("morphoAaveV3"));
         rewardsDistributorCore = networkConfig.getAddress("rewardsDistributorCore");
         rewardsDistributorVaults = networkConfig.getAddress("rewardsDistributorVaults");
     }
 
-    function _addModule(IAvatar avatar, address module) internal {
-        vm.prank(address(avatar));
-        avatar.enableModule(module);
+    function _getForkBlockNumber() internal virtual {
+        uint256 forkBlockNumber = _forkBlockNumber();
+        if (forkBlockNumber == 0) {
+            forkId = vm.createSelectFork(chain.rpcUrl);
+        } else {
+            forkId = vm.createSelectFork(chain.rpcUrl, forkBlockNumber);
+        }
     }
 
     function _populateMembersToCheck() internal {

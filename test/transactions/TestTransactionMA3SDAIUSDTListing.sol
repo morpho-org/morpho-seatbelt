@@ -19,10 +19,12 @@ contract TestTransactionMA3SDAIUSDTListing is TestTransactionSetup {
         vm.prank(A_S_DAI_HOLDER);
         Token(A_S_DAI).transfer(address(morphoAaveV3), 1 ether);
 
+        // The encoded calls of all the transactions
         bytes[] memory transactions = _buildTransactions();
-        bytes memory multisendTx = _concatMultisendTx("", address(morphoAaveV3), 0, transactions);
+        // The data to use in the multisend
+        bytes memory multisendData = _concatMultisendTx("", address(morphoAaveV3), 0, transactions);
         vm.prank(address(delayModifier));
-        morphoAdmin.execTransactionFromModule(address(multicall), 0, multisendTx, Operation.DelegateCall);
+        morphoAdmin.execTransactionFromModule(address(multicall), 0, multisendData, Operation.DelegateCall);
     }
 
     function _concatMultisendTx(bytes memory data, address to, uint256 value, bytes[] memory transactions)
@@ -46,26 +48,29 @@ contract TestTransactionMA3SDAIUSDTListing is TestTransactionSetup {
 
     function _buildTransactions() internal view returns (bytes[] memory transactions) {
         transactions = new bytes[](18);
-        transactions[0] = abi.encodeCall(morphoAaveV3.createMarket, (S_DAI, 0, 0));
-        transactions[1] = abi.encodeCall(morphoAaveV3.setAssetIsCollateralOnPool, (S_DAI, true));
-        transactions[2] = abi.encodeCall(morphoAaveV3.setAssetIsCollateral, (S_DAI, true));
-        transactions[3] = abi.encodeCall(morphoAaveV3.setIsSupplyPaused, (S_DAI, true));
-        transactions[4] = abi.encodeCall(morphoAaveV3.setIsWithdrawPaused, (S_DAI, true));
-        transactions[5] = abi.encodeCall(morphoAaveV3.setIsBorrowPaused, (S_DAI, true));
-        transactions[6] = abi.encodeCall(morphoAaveV3.setIsRepayPaused, (S_DAI, true));
+        {
+            transactions[0] = abi.encodeCall(morphoAaveV3.createMarket, (S_DAI, 0, 0));
+            transactions[1] = abi.encodeCall(morphoAaveV3.setAssetIsCollateralOnPool, (S_DAI, true));
+            transactions[2] = abi.encodeCall(morphoAaveV3.setAssetIsCollateral, (S_DAI, true));
+            transactions[3] = abi.encodeCall(morphoAaveV3.setIsSupplyPaused, (S_DAI, true));
+            transactions[4] = abi.encodeCall(morphoAaveV3.setIsWithdrawPaused, (S_DAI, true));
+            transactions[5] = abi.encodeCall(morphoAaveV3.setIsBorrowPaused, (S_DAI, true));
+            transactions[6] = abi.encodeCall(morphoAaveV3.setIsRepayPaused, (S_DAI, true));
+            transactions[7] = abi.encodeCall(morphoAaveV3.setIsLiquidateBorrowPaused, (S_DAI, true));
+            transactions[8] = abi.encodeCall(morphoAaveV3.setIsP2PDisabled, (S_DAI, true));
+        }
 
-        transactions[7] = abi.encodeCall(morphoAaveV3.setIsLiquidateBorrowPaused, (S_DAI, true));
-        transactions[8] = abi.encodeCall(morphoAaveV3.setIsP2PDisabled, (S_DAI, true));
-        transactions[9] = abi.encodeCall(morphoAaveV3.createMarket, (USDT, 0, 0));
-
-        transactions[10] = abi.encodeCall(morphoAaveV3.setAssetIsCollateralOnPool, (USDT, true));
-        transactions[11] = abi.encodeCall(morphoAaveV3.setAssetIsCollateral, (USDT, true));
-        transactions[12] = abi.encodeCall(morphoAaveV3.setIsSupplyPaused, (USDT, true));
-        transactions[13] = abi.encodeCall(morphoAaveV3.setIsWithdrawPaused, (USDT, true));
-        transactions[14] = abi.encodeCall(morphoAaveV3.setIsBorrowPaused, (USDT, true));
-        transactions[15] = abi.encodeCall(morphoAaveV3.setIsRepayPaused, (USDT, true));
-        transactions[16] = abi.encodeCall(morphoAaveV3.setIsLiquidateBorrowPaused, (USDT, true));
-        transactions[17] = abi.encodeCall(morphoAaveV3.setIsP2PDisabled, (USDT, true));
+        {
+            transactions[9] = abi.encodeCall(morphoAaveV3.createMarket, (USDT, 0, 0));
+            transactions[10] = abi.encodeCall(morphoAaveV3.setAssetIsCollateralOnPool, (USDT, true));
+            transactions[11] = abi.encodeCall(morphoAaveV3.setAssetIsCollateral, (USDT, true));
+            transactions[12] = abi.encodeCall(morphoAaveV3.setIsSupplyPaused, (USDT, true));
+            transactions[13] = abi.encodeCall(morphoAaveV3.setIsWithdrawPaused, (USDT, true));
+            transactions[14] = abi.encodeCall(morphoAaveV3.setIsBorrowPaused, (USDT, true));
+            transactions[15] = abi.encodeCall(morphoAaveV3.setIsRepayPaused, (USDT, true));
+            transactions[16] = abi.encodeCall(morphoAaveV3.setIsLiquidateBorrowPaused, (USDT, true));
+            transactions[17] = abi.encodeCall(morphoAaveV3.setIsP2PDisabled, (USDT, true));
+        }
     }
 
     function _forkBlockNumber() internal virtual override returns (uint256) {

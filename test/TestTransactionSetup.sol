@@ -18,6 +18,17 @@ contract TestTransactionSetup is TestSetup {
         avatar.enableModule(module);
     }
 
+    function _executeDAOTestTransaction(string memory filename) internal {
+        // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
+        _addModule(IAvatar(morphoDao), address(this));
+        _addModule(IAvatar(operator), address(this));
+
+        Transaction memory transaction = _getTxData(filename);
+
+        (bool success, ) = transaction.to.call{value: transaction.value}(transaction.data);
+        require(success, "transaction failed");
+    }
+
     function _executeTestTransaction(string memory filename) internal {
         // This is so we can just call execTransactionFromModule to simulate executing transactions without signatures.
         _addModule(IAvatar(morphoDao), address(this));

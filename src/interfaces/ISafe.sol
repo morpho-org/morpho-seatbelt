@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.6.2;
 
-import {IAvatar} from "src/interfaces/IAvatar.sol";
-import {IOwnerManager} from "src/interfaces/IOwnerManager.sol";
-import {Operation} from "src/libraries/Types.sol";
+import {IAvatar} from "./IAvatar.sol";
+import {IOwnerManager} from "./IOwnerManager.sol";
 
 interface ISafe is IAvatar, IOwnerManager {
     function isModuleEnabled(address module) external view returns (bool);

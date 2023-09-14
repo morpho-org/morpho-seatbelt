@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.0;
 
-import "test/TestTransactionSetup.sol";
 import {IMorphoAaveV3SupplyVault} from "src/interfaces/IMorphoAaveV3SupplyVault.sol";
-import {Ownable2Step} from "@openzeppelin-contracts/contracts/access/Ownable2Step.sol";
-import {IERC20} from "@openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract TestMA3WETHDeployment is TestTransactionSetup {
-    using RoleHelperLib for IRoles;
+import {Ownable2Step} from "@openzeppelin/contracts/access/Ownable2Step.sol";
+import {ITransparentUpgradeableProxy} from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+
+import "./helpers/MorphoAssociationTxTest.sol";
+
+contract ma3WETHDeploymentTxTest is MorphoAssociationTxTest {
     using ConfigLib for Config;
 
     IMorphoAaveV3SupplyVault internal vault = IMorphoAaveV3SupplyVault(0x39Dd7790e75C6F663731f7E1FdC0f35007D3879b);
@@ -15,28 +17,15 @@ contract TestMA3WETHDeployment is TestTransactionSetup {
         IMorphoAaveV3SupplyVault(0xb1c23d9ca977aB301417332Def6f91AcBD410A96);
     IERC20 internal WETH = IERC20(0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2);
 
-    function setUp() public virtual override {
-        super.setUp();
-        _addModule(IAvatar(morphoAssociation), address(this));
-        _execute("ma3WETHDeployment");
+    function _txName() internal pure override returns (string memory) {
+        return "ma3WethDeployment";
     }
 
-    function _network() internal view virtual override returns (string memory) {
-        return "ethereum-mainnet";
+    function _forkBlockNumber() internal pure override returns (uint256) {
+        return 17_478_410;
     }
 
-    function _forkBlockNumber() internal virtual override returns (uint256) {
-        return 17478410;
-    }
-
-    function _execute(string memory txName) internal virtual {
-        Transaction memory transaction = _getTxData(txName);
-        morphoAssociation.execTransactionFromModule(
-            transaction.to, transaction.value, transaction.data, transaction.operation
-        );
-    }
-
-    function testAssertions() public virtual {
+    function testMa3WETHDeployment() public {
         assertEq(Ownable2Step(address(vault)).pendingOwner(), address(morphoAdmin));
 
         assertEq(vault.MORPHO(), address(morphoAaveV3));

@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.6.2;
 
-import {Operation} from "src/libraries/Types.sol";
+enum Operation {
+    Call,
+    DelegateCall
+}
 
 interface IAvatar {
     event EnabledModule(address module);

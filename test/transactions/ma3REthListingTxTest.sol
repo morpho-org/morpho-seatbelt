@@ -1,24 +1,23 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity ^0.8.0;
 
-import "test/TestTransactionSetup.sol";
+import "./helpers/DelayModifierTxTest.sol";
 
-contract TestTransactionMA3CbEthListing is TestTransactionSetup {
-    address internal constant CB_ETH = 0xBe9895146f7AF43049ca1c1AE358B0541Ea49704;
+contract ma3REthListingTxTest is DelayModifierTxTest {
+    address internal constant RETH = 0xae78736Cd615f374D3085123A210448E74Fc6393;
 
-    function setUp() public virtual override {
-        super.setUp();
-        _executeTestTransaction("ma3CbEthListing");
+    function _txName() internal pure override returns (string memory) {
+        return "ma3REthListing";
     }
 
     function _forkBlockNumber() internal virtual override returns (uint256) {
-        return 17_613_082;
+        return 17_404_894;
     }
 
-    function testAssertionsOfTransaction() public virtual {
-        IMorphoAaveV3.Market memory market = morphoAaveV3.market(CB_ETH);
+    function testMa3RETHListing() public {
+        IMorphoAaveV3.Market memory market = morphoAaveV3.market(RETH);
 
-        assertEq(market.underlying, CB_ETH, "Wrong address");
+        assertEq(market.underlying, RETH, "Wrong address");
         assertTrue(market.pauseStatuses.isBorrowPaused);
         assertTrue(market.pauseStatuses.isSupplyPaused);
         assertTrue(market.pauseStatuses.isRepayPaused);

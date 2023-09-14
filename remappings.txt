@@ -3,7 +3,9 @@ test/=test/
 config/=config/
 
 @forge-std/=lib/forge-std/src/
-@morpho-aave-v3/=lib/morpho-aave-v3/
-@openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable
-@openzeppelin-contracts/=lib/openzeppelin-contracts
-@morpho-token/=lib/morpho-token/
+
+@morpho-token/=lib/morpho-token/src/
+@semitransferable-token/=lib/morpho-token/lib/semitransferable-token/src/
+
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/

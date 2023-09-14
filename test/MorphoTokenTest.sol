@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity ^0.8.0;
 
-import "test/TestTransactionSetup.sol";
+import {Token} from "@semitransferable-token/Token.sol";
 
-contract TestMorphoToken is TestTransactionSetup {
+import "./helpers/ForkTest.sol";
+
+contract MorphoTokenTest is ForkTest {
     // Sense whitelisted addresses https://forum.morpho.xyz/t/whitelisted-morpho-transfers-for-sense-integration/151
     address public constant SENSE_REWARDS_DISTRIBUTOR = 0x6bce2D632fc8a327e6Ea353b028999bfCbCb6fcD;
     address public constant MA_DAI_SENSE_ADAPTER = 0x9887e67AaB4388eA4cf173B010dF5c92B91f55B5;
@@ -11,7 +13,7 @@ contract TestMorphoToken is TestTransactionSetup {
     address public constant MA_USDT_SENSE_ADAPTER = 0x8c5e7301a012DC677DD7DaD97aE44032feBCD0FD;
 
     function testOwner() public {
-        assertEq(morphoToken.owner(), address(morphoDao));
+        assertEq(Ownable(address(morphoToken)).owner(), address(morphoDao));
     }
 
     function testRole0() public {

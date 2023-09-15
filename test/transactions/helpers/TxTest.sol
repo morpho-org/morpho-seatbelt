@@ -15,7 +15,7 @@ struct Tx {
     uint256 value;
 }
 
-abstract contract TxTest is ForkTest /*, DaoTest, RoleModifierTest, MorphoTokenTest*/ {
+abstract contract TxTest is ForkTest, DaoTest, RoleModifierTest, MorphoTokenTest {
     using stdJson for string;
     using ConfigLib for Config;
 

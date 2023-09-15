@@ -3,8 +3,6 @@ pragma solidity ^0.8.0;
 
 import "./MorphoDaoTxTest.sol";
 
-/// @notice The DAO can call all the governance functions including the ones that can be used by Morpho Operator.
-/// It just needs to be executed through the Delay Modifier.
 abstract contract DelayModifierTxTest is MorphoDaoTxTest {
     constructor() {
         avatars.push(operator);

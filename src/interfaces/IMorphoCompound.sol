@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.6.2;
 
 struct MaxGasForMatching {
     uint64 supply;

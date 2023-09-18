@@ -1,10 +1,41 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.6.2;
 
-import {IAvatar} from "src/interfaces/IAvatar.sol";
-import {Operation, ExecutionOptions, Comparison, ParameterType} from "src/libraries/Types.sol";
+import {IAvatar, Operation} from "./IAvatar.sol";
+import {IModule} from "./IModule.sol";
 
-interface IRoles is IAvatar {
+enum ParameterType {
+    Static,
+    Dynamic,
+    Dynamic32
+}
+
+enum Comparison {
+    EqualTo,
+    GreaterThan,
+    LessThan,
+    OneOf
+}
+
+enum Clearance {
+    None,
+    Target,
+    Function
+}
+
+struct TargetAddress {
+    Clearance clearance;
+    ExecutionOptions options;
+}
+
+enum ExecutionOptions {
+    None,
+    Send,
+    DelegateCall,
+    Both
+}
+
+interface IRoleModifier is IAvatar, IModule {
     function setUp(bytes memory initParams) external;
     function setMultisend(address _multisend) external;
     function allowTarget(uint16 role, address targetAddress, ExecutionOptions options) external;

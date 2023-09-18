@@ -1,41 +1,54 @@
 {
-    "name": "morpho-seatbelt",
-    "version": "1.0.0",
-    "description": "Testing suite to verify Dao's setUp",
-    "author": "Morpho Labs <security@morpho.xyz>",
-    "license": "MIT",
-    "keywords": [
-      "defi",
-      "protocol",
-      "smart-contracts",
-      "DAO"
-    ],
-    "homepage": "https://github.com/morpho-org/morpho-seatbelt/blob/main/README.md",
-    "bugs": {
-      "email": "security@morpho.xyz"
-    },
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/morpho-org/morpho-seatbelt"
-    },
-    "scripts": {
-      "test": "forge test",
-      "postinstall": "husky install"
-    },
-    "devDependencies": {
-      "@commitlint/cli": "^17.6.3",
-      "@commitlint/config-conventional": "^17.6.3",
-      "husky": "^8.0.3",
-      "lint-staged": "^13.2.2",
-      "prettier": "^2.8.8"
-    },
-    "lint-staged": {
-      "*.sol": "forge fmt",
-      "*.json": "prettier"
-    },
-    "commitlint": {
-      "extends": [
-        "@commitlint/config-conventional"
-      ]
-    }
+  "name": "morpho-seatbelt",
+  "version": "1.0.0",
+  "description": "Testing suite to verify Dao's setUp",
+  "author": {
+    "name": "Morpho Labs",
+    "email": "security@morpho.org",
+    "url": "https://github.com/morpho-labs"
+  },
+  "homepage": "https://github.com/morpho-org/morpho-seatbelt/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/morpho-org/morpho-seatbelt"
+  },
+  "bugs": {
+    "url": "https://github.com/morpho-org/create-safe-tx/issues",
+    "email": "security@morpho.org"
+  },
+  "license": "MIT",
+  "keywords": [
+    "defi",
+    "protocol",
+    "smart-contracts",
+    "dao",
+    "safe",
+    "gnosis",
+    "module"
+  ],
+  "scripts": {
+    "postinstall": "husky install && forge install",
+    "test": "forge test",
+    "test:setup": "FOUNDRY_NO_MATCH_CONTRACT=TxTest forge test",
+    "test:txs": "FOUNDRY_MATCH_CONTRACT=TxTest forge test",
+    "lint": "forge fmt --check",
+    "lint:fix": "forge fmt",
+    "clean": "forge clean"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^2.8.8"
+  },
+  "lint-staged": {
+    "*.sol": "forge fmt",
+    "*.json": "prettier"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   }
+}

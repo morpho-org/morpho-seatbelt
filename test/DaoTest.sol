@@ -1,19 +1,18 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity ^0.8.0;
 
-import "src/interfaces/IModule.sol";
-import "test/TestTransactionSetup.sol";
+import {IModule} from "src/interfaces/IModule.sol";
 
-contract TestDAOSetup is TestTransactionSetup {
-    // keccak256("guard_manager.guard.address") = 0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8
-    uint256 public constant GUARD_STORAGE_SLOT =
-        uint256(0x4a204f620c8c5ccdca3fd54d003badd85ba500436a431f0cbda4f558c93c34c8);
+import "./helpers/ForkTest.sol";
+
+contract DaoTest is ForkTest {
+    uint256 internal constant GUARD_STORAGE_SLOT = uint256(keccak256("guard_manager.guard.address"));
 
     function testMorphoAdminAsOwnerOfProtocols() public {
         assertEq(Ownable(address(morphoCompound)).owner(), address(morphoAdmin));
         assertEq(Ownable(address(morphoAaveV2)).owner(), address(morphoAdmin));
         assertEq(Ownable(address(morphoAaveV3)).owner(), address(morphoAdmin));
-        assertEq(Ownable(address(proxyAdmin)).owner(), address(morphoAdmin));
+        assertEq(proxyAdmin.owner(), address(morphoAdmin));
     }
 
     function testMorphoAdminAsOwnerOfVaults() public {
@@ -34,15 +33,15 @@ contract TestDAOSetup is TestTransactionSetup {
 
     function testRoleModifier() public {
         assertEq(Ownable(address(roleModifier)).owner(), address(morphoAdmin));
-        assertEq(IModule(address(roleModifier)).target(), address(morphoAdmin));
-        assertEq(IModule(address(roleModifier)).avatar(), address(morphoAdmin));
+        assertEq(roleModifier.target(), address(morphoAdmin));
+        assertEq(roleModifier.avatar(), address(morphoAdmin));
         assertTrue(roleModifier.isModuleEnabled(address(morphoDao)));
     }
 
     function testDelayModifier() public {
         assertEq(Ownable(address(delayModifier)).owner(), address(morphoAdmin));
-        assertEq(IModule(address(delayModifier)).target(), address(morphoAdmin));
-        assertEq(IModule(address(delayModifier)).avatar(), address(morphoAdmin));
+        assertEq(delayModifier.target(), address(morphoAdmin));
+        assertEq(delayModifier.avatar(), address(morphoAdmin));
         assertTrue(delayModifier.isModuleEnabled(address(morphoDao)));
         assertEq(delayModifier.txCooldown(), 1 days);
         assertEq(delayModifier.txExpiration(), 0);
@@ -88,30 +87,16 @@ contract TestDAOSetup is TestTransactionSetup {
         assertEq(morphoDao.getThreshold(), 5, "Wrong Threshold for DAO");
     }
 
-    function testRightOwnerMorphoDAO() public {
-        address[] memory ownersDao = morphoDao.getOwners();
-        assertEq(owners.length, ownersDao.length, "Wrong number of owner for DAO");
-        bool success;
-        for (uint256 i; i < ownersDao.length; i++) {
-            success = false;
-            for (uint256 j; j < owners.length; j++) {
-                if (ownersDao[i] == owners[j]) {
-                    success = true;
-                    break;
-                }
-            }
-            assertTrue(success, "Owner not expected");
-        }
-    }
+    function testOperatorOwnersIsDaoOwners() public {
+        address[] memory operatorOwners = operator.getOwners();
 
-    function testRightOwnerMorphoOperator() public {
-        address[] memory ownersOperator = operator.getOwners();
-        assertEq(owners.length, ownersOperator.length, "Wrong number of owner for DAO");
+        assertEq(operatorOwners.length, owners.length, "operatorOwners.length");
+
         bool success;
-        for (uint256 i; i < ownersOperator.length; i++) {
+        for (uint256 i; i < operatorOwners.length; i++) {
             success = false;
             for (uint256 j; j < owners.length; j++) {
-                if (ownersOperator[i] == owners[j]) {
+                if (operatorOwners[i] == owners[j]) {
                     success = true;
                     break;
                 }

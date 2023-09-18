@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.8.0;
+pragma solidity ^0.8.0;
 
-import "test/TestTransactionSetup.sol";
+import "./helpers/ForkTest.sol";
 
-contract TestRole is TestTransactionSetup {
-    using RoleHelperLib for IRoles;
-    using ConfigLib for Config;
+contract RoleModifierTest is ForkTest {
+    using ArrayLib for bytes4[];
+    using RoleModifierLib for IRoleModifier;
 
     function testMorphoDaoRole() public {
         for (uint16 i; i < 100; ++i) {
@@ -35,7 +35,7 @@ contract TestRole is TestTransactionSetup {
 
     function testSelectorDelayNotAllowedForDAO() public {
         for (uint256 i; i < delaySelectors.length; i++) {
-            if (!delaySelectorAllowedForDao(delaySelectors[i])) {
+            if (!delaySelectorsAllowedDao.contains(delaySelectors[i])) {
                 assertFalse(roleModifier.functionIsWildcarded(2, address(delayModifier), delaySelectors[i]));
             }
         }
@@ -81,14 +81,5 @@ contract TestRole is TestTransactionSetup {
         for (uint256 i; i < ma3SelectorsAdmin.length; i++) {
             assertFalse(roleModifier.functionIsWildcarded(role, address(morphoAaveV3), ma3SelectorsAdmin[i]));
         }
-    }
-
-    function delaySelectorAllowedForDao(bytes4 selector) internal view returns (bool) {
-        for (uint256 i; i < delaySelectorsAllowedDao.length; ++i) {
-            if (selector == delaySelectorsAllowedDao[i]) {
-                return true;
-            }
-        }
-        return false;
     }
 }

@@ -1,7 +1,14 @@
 [profile.default]
-src = "src"
-out = "out"
-libs = ["lib"]
-fs_permissions = [{ access = "read", path = "./config/"}]
+src = "/dev/null"
+via-ir = false
+fs_permissions = [{ access = "read", path = "config/networks/"}, { access = "read", path = "test/transactions/data/"}]
+
+[profile.default.rpc_endpoints]
+mainnet = "https://eth-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+tenderly = "https://rpc.tenderly.co/fork/${TENDERLY_FORK_ID}"
+
+[profile.default.fuzz]
+runs = 128
+
 
 # See more config options https://github.com/foundry-rs/foundry/tree/master/config

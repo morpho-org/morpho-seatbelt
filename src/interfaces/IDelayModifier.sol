@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.5.0;
+pragma solidity >=0.6.2;
 
-import {IAvatar} from "src/interfaces/IAvatar.sol";
-import {Operation} from "src/libraries/Types.sol";
+import {IAvatar, Operation} from "./IAvatar.sol";
+import {IModule} from "./IModule.sol";
 
-interface IDelay is IAvatar {
+interface IDelayModifier is IAvatar, IModule {
     function setUp(bytes memory initParams) external;
     function setTxCooldown(uint256 cooldown) external;
     function setTxExpiration(uint256 expiration) external;

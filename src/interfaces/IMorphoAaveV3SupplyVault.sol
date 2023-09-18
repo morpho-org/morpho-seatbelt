@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: AGPL-3.0-only
-pragma solidity >=0.5.0;
+pragma solidity >=0.6.2;
 
-import {IERC4626Upgradeable} from "@openzeppelin-contracts-upgradeable/contracts/interfaces/IERC4626Upgradeable.sol";
+import {IERC4626} from "@openzeppelin/contracts/interfaces/IERC4626.sol";
 
-interface IMorphoAaveV3SupplyVault is IERC4626Upgradeable {
+interface IMorphoAaveV3SupplyVault is IERC4626 {
     function MORPHO() external view returns (address);
 
     function recipient() external view returns (address);

@@ -9,7 +9,7 @@
 
 ## Overview
 
-Morpho Seatbelt provides a framework for testing governance transactions to update Morpho Optimizers. Morpho utilizes the [Zodiac](https://github.com/gnosis/zodiac) collection of tools to enforce transaction delays and restrict certain functions to addresses with an appropriate role. Some key utilities included are reading gnosis safe transactions from a json, reading key internal state variables of contracts without external getters, and minimal interfaces to limit dependencies. 
+Morpho Seatbelt provides a framework for testing governance transactions to update any contract controlled (directly or indirectly) by the Morpho DAO. Morpho uses the [Zodiac](https://github.com/gnosis/zodiac) collection of tools to enforce transaction delays and restrict certain functions to addresses with an appropriate role. Some key utilities included are reading gnosis safe transactions from a json, reading key internal state variables of contracts without external getters, and minimal interfaces to limit dependencies. 
 
 
 ---
@@ -19,21 +19,25 @@ Morpho Seatbelt provides a framework for testing governance transactions to upda
 ### Getting Started
 
 - Install [Foundry](https://github.com/foundry-rs/foundry) or Run `foundryup` to initialize Foundry.
-- Run `forge install` to initialize the repository by installing the required dependencies.
-- If not testing on mainnet, add a config file in the [network config](./config/networks) using the mainnet config as a template, and create a `.env` file with a NETWORK field.
-- If testing a safe transaction on the Morpho DAO, add the transaction information in the [transactions config](./config/transactions). You can use [this](./test/TestLog.sol) as a template. You can test two types of transactions with the Morpho DAO. 
+- Run `yarn` to initialize the repository by installing the required dependencies.
+- Create a `.env` file with a `ALCHEMY_KEY` field populated with a personal alchemy RPC key.
 
-The Raw Data transaction concerns the one's that you can execute directly with a simple script. The name of the json file has to be added in the `.env` in place of testRawData.
+### Running tests
 
+- Use `yarn test` to run tests on standard invariants regarding the Morpho DAO & the $MORPHO token setup.
+- Use `yarn test:txs` to run tests on specific DAO transactions.
 
-The other type of transaction that can be tested is the transaction that executed the function `executeTransactionFromModule` from the Morpho DAO. The arguments of the function `executeTransactionFromModule` need to be added to the json file. The name of the json file has to be added in the `.env` in place of testRawData.
+### Testing a DAO transaction
 
+#### Testing a transaction through the Delay Modifier
 
-You can now test the SetUp of the Morpho DAO with the following command: 
+- Copy the parameters of the call from the DAO to the delay modifier's `execTransactionFromModule` to a [json file appropriately named](./test/transactions/data/).
+- Create a test contract that inherits from `DelayModifierTxTest` (see examples: [ma3CbEthListingTxTest](./test/transactions/ma3CbEthListingTxTest.sol), [ma3REthListingTxTest](./test/transactions/ma3REthListingTxTest.sol), [ma3SDaiUsdtListingTxTest](./test/transactions/ma3SDaiUsdtListingTxTest.sol)).
 
-```bash
-forge test
-```
+#### Testing a transaction to the Morpho DAO
+
+- Copy the transaction data to a [json file appropriately named](./test/transactions/data/).
+- Create a test contract that inherits from `MorphoDaoTxTest` (see example: [swapStefanoGuillaumeDaoSignersTxTest](./test/transactions/swapStefanoGuillaumeDaoSignersTxTest.sol)).
 
 ## Questions & Feedback
 

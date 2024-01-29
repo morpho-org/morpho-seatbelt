@@ -16,5 +16,12 @@ contract morphoWhitelistingUrdTxTest is MorphoDaoTxTest {
 
     function testMorphoWhitelistingUrd() public {
         assertTrue(morphoToken.doesUserHaveRole(URD, uint8(0)), "doesUserHaveRole(URD, uint8(0))");
+
+        vm.prank(URD);
+        morphoToken.approve(address(morphoDao), type(uint256).max);
+
+        deal(address(morphoToken), URD, 1e18);
+        vm.prank(URD);
+        morphoToken.transfer(address(0), 1e18);
     }
 }

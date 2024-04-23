@@ -4,19 +4,15 @@ pragma solidity ^0.8.0;
 import "./helpers/MorphoDaoTxTest.sol";
 
 contract assetPausingTxTest is MorphoDaoTxTest {
-    address internal constant COMP = 0xc00e94Cb662C3520282E6f5717214004A7f26888;
-    address internal constant WETH = 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2;
-    address internal constant UNI = 0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984;
-    address internal constant USDT = 0xdAC17F958D2ee523a2206206994597C13D831ec7;
-    address internal constant CRV = 0xD533a949740bb3306d119CC777fa900bA034cd52;
+    address internal constant ma2CRV = 0x9dc7094530cB1bcf5442c3b9389ee386738A190c;
     address internal constant DAI = 0x6B175474E89094C44Da98b954EedeAC495271d0F;
     address internal constant WBTC = 0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599;
     address internal constant S_DAI = 0x83F20F44975D03b1b09e64809B757c47f942BEeA;
     address internal constant CB_ETH = 0xBe9895146f7AF43049ca1c1AE358B0541Ea49704;
 
-    address[] internal pausedMC2Assets = [COMP, WETH, UNI, USDT];
-    address[] internal pausedMA2Assets = [CRV];
-    address[] internal pausedMA3Assets = [DAI, WBTC, S_DAI, USDT, CB_ETH];
+    address[] internal pausedMC2Assets = [mcCOMP, mcWETH, mcUNI, mcUSDT];
+    address[] internal pausedMA2Assets = [ma2CRV];
+    address[] internal pausedMA3Assets = [DAI, WBTC, S_DAI, mcUSDT, CB_ETH];
 
     function _txName() internal pure override returns (string memory) {
         return "assetPausing";

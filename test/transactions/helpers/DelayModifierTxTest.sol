@@ -16,7 +16,7 @@ abstract contract DelayModifierTxTest is MorphoDaoTxTest {
                 data: abi.encodeCall(
                     IAvatar.execTransactionFromModule,
                     (transaction.to, transaction.value, transaction.data, transaction.operation)
-                    ),
+                ),
                 operation: Operation.Call
             })
         );

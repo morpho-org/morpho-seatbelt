@@ -50,5 +50,9 @@
     "extends": [
       "@commitlint/config-conventional"
     ]
+  },
+  "packageManager": "pnpm@11.0.9",
+  "engines": {
+    "node": ">=22.13.0"
   }
 }
